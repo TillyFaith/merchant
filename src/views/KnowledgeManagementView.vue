@@ -75,10 +75,10 @@ const handleUpload = (file) => {
   }
 }
 
-// 修改：统一提交处理函数
+// 提交创建文档
 const submitDocument = async () => {
   if (!newDocumentBusiness.value || !newDocumentTitle.value) {
-    ElMessage.warning('请填写标题并选择业务类型')
+    ElMessage.warning('请填写标题并选择业务和场景类型')
     return
   }
 
@@ -109,34 +109,34 @@ const submitDocument = async () => {
     // 重置表单
     uploadedFile.value = null
     isPdfUploaded.value = false
-    // ... 其他重置逻辑 ...
   } catch (error) {
     ElMessage.error('操作失败: ' + error.message)
   }
 }
 // 创建文本文档
-const createTextDocument = async () => {
-  if (!newDocumentTitle.value || (!isPdfUploaded.value && !newDocumentContent.value.trim()) || !newDocumentBusiness.value) {
-    ElMessage.warning('请填写标题、内容、业务类型和场景类型')
-    return
-  }
-  try {
-    await knowledgeStore.createTextKnowledge({
-      title: newDocumentTitle.value,
-      content: newDocumentContent.value,
-      business: newDocumentBusiness.value,
-      scene: newDocumentScene.value
-    })
-    newDocumentTitle.value = ''
-    newDocumentContent.value = ''
-    newDocumentBusiness.value = ''
-    newDocumentScene.value = ''
-    ElMessage.success('文档创建成功')
-  } catch (error) {
-    console.error('创建文档失败:', error)
-    ElMessage.error('创建文档失败: ' + error.message)
-  }
-}
+// const createTextDocument = async () => {
+//   if (!newDocumentTitle.value || (!isPdfUploaded.value && !newDocumentContent.value.trim()) || !newDocumentBusiness.value) {
+//     ElMessage.warning('请填写标题、内容、业务类型和场景类型')
+//     return
+//   }
+
+//   try {
+//     await knowledgeStore.createTextKnowledge({
+//       title: newDocumentTitle.value,
+//       content: newDocumentContent.value,
+//       business: newDocumentBusiness.value,
+//       scene: newDocumentScene.value
+//     })
+//     newDocumentTitle.value = ''
+//     newDocumentContent.value = ''
+//     newDocumentBusiness.value = ''
+//     newDocumentScene.value = ''
+//     ElMessage.success('文档创建成功')
+//   } catch (error) {
+//     console.error('创建文档失败:', error)
+//     ElMessage.error('创建文档失败: ' + error.message)
+//   }
+// }
 
 // 导航到文档详情
 const navigateToDocument = (docId) => {
@@ -290,7 +290,7 @@ const updateTextDocument = async () => {
                 <el-input type="textarea" v-model="newDocumentContent" :rows="5" placeholder="输入文档内容"></el-input>
               </el-form-item>
               <!-- 修改按钮文本和点击事件 -->
-              <el-button v-if="!isEditMode" type="primary" @click="createTextDocument">
+              <el-button v-if="!isEditMode" type="primary" @click="submitDocument">
                 创建文档
               </el-button>
               <el-button v-else type="primary" @click="updateTextDocument">

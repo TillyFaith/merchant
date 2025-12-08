@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { Search, ChatLineRound, Document, Histogram } from '@element-plus/icons-vue'
+import { ChatLineRound, Document, Histogram } from '@element-plus/icons-vue'
 import SearchDialog from '@/components/SearchDialog.vue'
 import router from '@/router'
-const searchText = ref('')
+// const searchText = ref('')
 const showSearchDialog = ref(false)
 // 导航到聊天视图
 const navigateToChatview = () => {
@@ -21,9 +21,9 @@ const navigateToVisualization = () => {
 }
 
 // 处理搜索框点击
-const handleSearchClick = () => {
-  showSearchDialog.value = true
-}
+// const handleSearchClick = () => {
+//   showSearchDialog.value = true
+// }
 
 // 添加点击遮罩层关闭对话框的处理
 const handleOverlayClick = (event) => {
