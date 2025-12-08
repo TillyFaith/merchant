@@ -6,9 +6,18 @@ import ZeroHitQuestions from '@/components/ZeroHitQuestions.vue'
 import Top5Documents from '@/components/Top5Documents.vue'
 import { useRouter } from 'vue-router'
 import { Document } from '@element-plus/icons-vue'
+// 新增：导入store和响应式相关依赖
+import { useDataVisualizationStore } from '@/stores/dataVisualization'
+import { onMounted, ref } from 'vue'
+import { ElMessage } from 'element-plus'
 
 // 获取路由实例
 const router = useRouter()
+// 新增：获取数据可视化store实例
+const visualizationStore = useDataVisualizationStore()
+// 新增：定义加载状态
+const loading = ref(true)
+
 // 导航到知识文档管理页面
 const navigateToKnowledgeManagement = () => {
   router.push('/knowledge')
@@ -17,6 +26,23 @@ const navigateToKnowledgeManagement = () => {
 const handleBack = () => {
   router.push('/')
 }
+
+// 新增：加载可视化数据
+const loadVisualizationData = async () => {
+  try {
+    loading.value = true
+    await visualizationStore.fetchVisualizationData()
+  } catch (error) {
+    ElMessage.error('数据加载失败：' + error.message)
+  } finally {
+    loading.value = false
+  }
+}
+
+// 新增：组件挂载时加载数据
+onMounted(() => {
+  loadVisualizationData()
+})
 </script>
 <template>
   <el-container class="app-container">
@@ -54,6 +80,9 @@ const handleBack = () => {
         </el-menu>
       </el-aside>
       <el-main class="app-main">
+        <!-- 新增：加载状态显示 -->
+        <el-loading v-if="loading" target=".app-main" text="数据加载中..." />
+
         <el-row :gutter="20">
           <el-col :span="24">
             <el-card shadow="hover">
@@ -62,7 +91,8 @@ const handleBack = () => {
                   <span>知识点热力图</span>
                 </div>
               </template>
-              <KnowledgeHeatmap />
+              <!-- 修改：传递热力图数据 -->
+              <KnowledgeHeatmap :data="visualizationStore.heatmapData" />
             </el-card>
           </el-col>
         </el-row>
@@ -74,7 +104,8 @@ const handleBack = () => {
                   <span>高频问题Top10</span>
                 </div>
               </template>
-              <HighFrequencyQuestions />
+              <!-- 修改：传递高频问题数据 -->
+              <HighFrequencyQuestions :data="visualizationStore.top10Data" />
             </el-card>
           </el-col>
           <el-col :span="12">
@@ -84,7 +115,8 @@ const handleBack = () => {
                   <span>Top5引用文档</span>
                 </div>
               </template>
-              <Top5Documents />
+              <!-- 修改：传递热门文档数据 -->
+              <Top5Documents :data="visualizationStore.top5DocsData" />
             </el-card>
           </el-col>
         </el-row>
@@ -96,7 +128,8 @@ const handleBack = () => {
                   <span>零命中问题列表</span>
                 </div>
               </template>
-              <ZeroHitQuestions />
+              <!-- 修改：传递零命中问题数据 -->
+              <ZeroHitQuestions :data="visualizationStore.noHitData" />
             </el-card>
           </el-col>
         </el-row>

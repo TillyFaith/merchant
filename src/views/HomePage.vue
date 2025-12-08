@@ -76,7 +76,7 @@ onUnmounted(() => {
         <span class="logo-text">商家知识管理与问答系统</span>
       </div>
       <div class="header-right">
-        <div class="search-container" @click="handleSearchClick">
+        <!-- <div class="search-container" @click="handleSearchClick">
           <div class="search-input">
             <el-icon class="search-icon">
               <Search />
@@ -84,8 +84,8 @@ onUnmounted(() => {
             <input type="text" placeholder="搜索" readonly v-model="searchText" />
             <div class="shortcut-key">⌘ K</div>
           </div>
-        </div>
-        <a href="https://github.com/Solomon-He/LLM-chat" target="_blank" class="github-link">
+        </div> -->
+        <a href="https://github.com" target="_blank" class="github-link">
           <img src="@/assets/photo/github.png" alt="GitHub" class="github-icon" />
         </a>
       </div>

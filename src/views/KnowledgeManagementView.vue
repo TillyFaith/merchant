@@ -58,25 +58,65 @@ onMounted(() => {
 })
 
 // 处理文档上传
+// 新增：文件上传状态跟踪
+const uploadedFile = ref(null)
+const isPdfUploaded = ref(false)
+
+// 修改：处理文件上传逻辑
 const handleUpload = (file) => {
-  if (!newDocumentBusiness.value || !newDocumentScene.value || !newDocumentTitle.value) {
-    ElMessage.warning('请填写标题并选择业务和场景类型')
+  uploadedFile.value = file.raw
+  // 检测文件类型是否为PDF
+  const fileType = file.name.toLowerCase().split('.').pop()
+  isPdfUploaded.value = fileType === 'pdf'
+
+  // 如果是PDF文件，自动清空并禁用内容输入
+  if (isPdfUploaded.value) {
+    newDocumentContent.value = ''
+  }
+}
+
+// 修改：统一提交处理函数
+const submitDocument = async () => {
+  if (!newDocumentBusiness.value || !newDocumentTitle.value) {
+    ElMessage.warning('请填写标题并选择业务类型')
     return
   }
 
-  knowledgeStore.uploadDocument(file, newDocumentTitle.value, newDocumentBusiness.value, newDocumentScene.value)
-    .then(() => {
-      // 清空表单
-      ElMessage.success('文档上传成功')
-    })
-    .catch(error => {
-      console.error('上传失败:', error)
-      ElMessage.error('上传失败: ' + error.message)
-    })
+  try {
+    if (uploadedFile.value) {
+      // 处理文件上传
+      await knowledgeStore.uploadDocument(
+        uploadedFile.value,
+        newDocumentTitle.value,
+        newDocumentBusiness.value,
+        newDocumentScene.value
+      )
+    } else if (!isPdfUploaded.value) {
+      // 处理文本内容提交
+      if (!newDocumentContent.value.trim()) {
+        ElMessage.warning('请输入文档内容')
+        return
+      }
+      await knowledgeStore.createTextKnowledge({
+        title: newDocumentTitle.value,
+        content: newDocumentContent.value,
+        business: newDocumentBusiness.value,
+        scene: newDocumentScene.value
+      })
+    }
+    ElMessage.success('文档创建成功')
+    uploadDialogVisible.value = false
+    // 重置表单
+    uploadedFile.value = null
+    isPdfUploaded.value = false
+    // ... 其他重置逻辑 ...
+  } catch (error) {
+    ElMessage.error('操作失败: ' + error.message)
+  }
 }
 // 创建文本文档
 const createTextDocument = async () => {
-  if (!newDocumentTitle.value || !newDocumentContent.value || !newDocumentBusiness.value) {
+  if (!newDocumentTitle.value || (!isPdfUploaded.value && !newDocumentContent.value.trim()) || !newDocumentBusiness.value) {
     ElMessage.warning('请填写标题、内容、业务类型和场景类型')
     return
   }
@@ -137,6 +177,7 @@ const handleStatusChange = async (docId, newStatus) => {
   try {
     await knowledgeStore.updateDocumentStatus(docId, newStatus);
     ElMessage.success(`文档状态${newStatus === 1 ? '生效' : '失效'}`);
+    knowledgeStore.loadDocList(localStorage.getItem('savedBusiness') || '', localStorage.getItem('savedScene') || '')
   } catch (error) {
     console.error('更新状态失败:', error);
     ElMessage.error('更新状态失败，请重试');
@@ -245,7 +286,7 @@ const updateTextDocument = async () => {
           </el-form>
           <div class="manual-input-section">
             <el-form>
-              <el-form-item label="内容" required>
+              <el-form-item label="内容">
                 <el-input type="textarea" v-model="newDocumentContent" :rows="5" placeholder="输入文档内容"></el-input>
               </el-form-item>
               <!-- 修改按钮文本和点击事件 -->

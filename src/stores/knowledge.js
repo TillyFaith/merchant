@@ -138,11 +138,11 @@ export const useKnowledgeStore = defineStore(
       isLoading.value = true
       try {
         const formData = new FormData()
-        formData.append('file', file)
-        formData.append('title', title) // 使用正确的标题参数
-        formData.append('business', business)
-        formData.append('scene', scene)
-        formData.append('status', 0)
+        formData.append('file', file) // 文件对象 (test2.pdf)
+        formData.append('title', title) // 标题 (pdf_test4)
+        formData.append('business', business) // 业务类型 (business2_test)
+        formData.append('scene', scene) // 场景类型 (scene2_test)
+        formData.append('status', 0) // 状态值 (固定为0)
 
         await createDocument(formData)
 

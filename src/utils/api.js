@@ -95,7 +95,7 @@ export const modifyDocumentApi = async (formData) => {
 // 更新文档状态
 export const updateDocumentStatusApi = async (docId, status) => {
   const response = await fetch(`${BASE_URL}/knowledge/updateStatus`, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -172,7 +172,7 @@ export const getVisualizationData = async () => {
  * 获取知识点热力图数据
  */
 export const getHeatmapData = async () => {
-  const response = await fetch(`${BASE_URL}/visualization/heatmap`, {
+  const response = await fetch(`${BASE_URL}/robot/heatmap`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ export const getHeatmapData = async () => {
  * 获取高频问题Top10数据
  */
 export const getTop10Data = async () => {
-  const response = await fetch(`${BASE_URL}/visualization/top10`, {
+  const response = await fetch(`${BASE_URL}/robot/topQuestions`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -216,7 +216,7 @@ export const getTop10Data = async () => {
  * 获取 top5引用文档数据
  */
 export const getTop5RefData = async () => {
-  const response = await fetch(`${BASE_URL}/visualization/top5ref`, {
+  const response = await fetch(`${BASE_URL}/robot/topDocs`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -238,7 +238,7 @@ export const getTop5RefData = async () => {
  * 获取未名中问题数据
  */
 export const getNoHitData = async () => {
-  const response = await fetch(`${BASE_URL}/visualization/nohit`, {
+  const response = await fetch(`${BASE_URL}/robot/zeroHit`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -251,7 +251,7 @@ export const getNoHitData = async () => {
 
   const data = await response.json()
   if (!data.ok) {
-    throw new Error(data.message || '获取无匹配问题数据失败')
+    throw new Error(data.message || '获取 未名中问题数据失败')
   }
   return data.data
 }
