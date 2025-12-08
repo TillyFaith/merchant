@@ -130,13 +130,13 @@ src/
 ### 安装依赖
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 运行项目
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ## 🤝 贡献指南
