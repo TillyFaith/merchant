@@ -22,9 +22,9 @@
 ## 🛠️ 技术栈
 
 - **前端框架**: Vue 3 + Vite
-- **状态管理**: Pinia + 持久化插件
+- **状态管理**: Pinia + 持久化插件 (数据自动恢复/离线可用)
 - **UI 组件**: Element Plus
-- **数据可视化**: ECharts
+- **数据可视化**: ECharts 5.x (图表实例智能管理/响应式渲染)
 - **路由管理**: Vue Router
 - **样式处理**: SCSS
 - **Markdown 渲染**: Marked.js
@@ -51,24 +51,9 @@ src/
 │ └── dataVisualization.js # 可视化数据状态
 ├── views/ # 页面
 │ ├── KnowledgeManagementView.vue # 文档管理页面
-│ ├── DataVisualizationView.vue # 数据可视化页面
-│ ├── visualize.vue # 统计仪表盘
-│ └── ...
-│ ├── ChatInput.vue # 聊天输入框组件
-│ ├── ChatMessage.vue # 消息显示组件
-│ ├── DialogEdit.vue # 对话编辑弹窗
-│ ├── PopupMenu.vue # 侧边菜单组件
-│ ├── SearchDialog.vue # 搜索对话框组件
-│ └── SettingsPanel.vue # 设置面板组件
-├── stores/ # Pinia 状态管理
-│ ├── chat.js # 聊天相关状态
-│ └── setting.js # 设置相关状态
-├── utils/ # 工具函数
-│ ├── api.js # API 请求封装
-│ ├── markdown.js # Markdown 处理
-│ └── messageHandler.js # 消息处理
-├── views/ # 页面
-│ ├── HomePage.vue # 首页
+│ ├── VisualizeView.vue # 数据可视化页面
+│ ├── ChatView.vue # 聊天界面
+│ └── HomePage.vue # 首页
 │ └── ChatView.vue # 主聊天页面
 └── App.vue # 根组件
 ```
@@ -83,9 +68,9 @@ src/
 
 ### 数据可视化分析
 
-- 知识点热力图：文档引用统计 评估知识价值
-- 高频问题 Top10：识别用户关注焦点
-- 零命中问题追踪：优化知识盲点
+- 高频问题Top10：柱状图实时展示咨询量最高的问题，支持数据自动刷新
+- 零命中问题追踪：表格形式呈现未匹配到答案的问题，支持按时间/咨询量排序
+- 知识热力图：展示被引用次数最多的Top5文档，支持图表响应式调整
 
 ### 多会话管理
 
@@ -106,15 +91,8 @@ src/
 
 - 简洁现代的界面风格
 - 流畅的动画过渡效果
-- 深色/浅色主题切换
-
-## 🔧 配置项
-
-### 模型设置
-
-- 支持多种 LLM 模型
-- 可配置 API 密钥
-- 自定义模型参数
+- 图表数据加载状态提示
+- 响应式布局适配（桌面/平板/移动端）
 
 ## 💾 数据持久化
 
@@ -122,7 +100,6 @@ src/
 
 - 会话历史记录
 - 用户设置
-- 主题偏好
 
 ## 🔨 开发指南
 
@@ -141,7 +118,3 @@ pnpm dev
 ## 🤝 贡献指南
 
 欢迎提交 Issue 和 Pull Request 来帮助改进项目。
-
-## 📄 许可证
-
-[MIT License](LICENSE)

@@ -27,28 +27,28 @@
               <span>数据可视化</span>
             </template>
             <!-- <el-menu-item index="1-1">知识点热力图</el-menu-item> -->
-            <el-menu-item index="1-2">高频问题Top10</el-menu-item>
+
             <el-menu-item index="1-3">零命中问题列表</el-menu-item>
-            <el-menu-item index="1-4">Top5引用文档</el-menu-item>
+            <el-menu-item index="1-4">知识文档热力图</el-menu-item>
+            <el-menu-item index="1-2">高频问题Top10</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>
 
       <el-main class="app-main" element-loading-text="数据加载中...">
-        <!-- 高频问题Top10 - 单独一行 -->
+        <!-- 零命中问题列表 - 单独一行 -->
         <el-row :gutter="20" style="margin-top: 20px;">
-          <el-col :span="24"> <!-- 修改为24格，占满整行 -->
+          <el-col :span="24">
             <el-card shadow="hover">
               <template #header>
                 <div class="card-header">
-                  <span>高频问题Top10</span>
+                  <span>零命中问题列表</span>
                 </div>
               </template>
-              <HighFrequencyQuestions :data="top10Data" />
+              <ZeroHitQuestions :data="noHitData" />
             </el-card>
           </el-col>
         </el-row>
-
         <!-- Top5引用文档 - 单独一行 -->
         <el-row :gutter="20" style="margin-top: 20px;">
           <el-col :span="24"> <!-- 修改为24格，占满整行 -->
@@ -62,17 +62,16 @@
             </el-card>
           </el-col>
         </el-row>
-
-        <!-- 零命中问题列表 - 单独一行 -->
+        <!-- 高频问题Top10 - 单独一行 -->
         <el-row :gutter="20" style="margin-top: 20px;">
-          <el-col :span="24">
+          <el-col :span="24"> <!-- 修改为24格，占满整行 -->
             <el-card shadow="hover">
               <template #header>
                 <div class="card-header">
-                  <span>零命中问题列表</span>
+                  <span>高频问题Top10</span>
                 </div>
               </template>
-              <ZeroHitQuestions :data="noHitData" />
+              <HighFrequencyQuestions :data="top10Data" />
             </el-card>
           </el-col>
         </el-row>
