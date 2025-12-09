@@ -91,7 +91,7 @@ import { useRouter } from 'vue-router'
 import { Document } from '@element-plus/icons-vue'
 // 新增：导入store和响应式相关依赖
 import { useDataVisualizationStore } from '@/stores/dataVisualization'
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, computed } from 'vue'
 // import { ElMessage } from 'element-plus'
 
 // 获取路由实例

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref, defineProps, defineEmits, onUnmounted } from 'vue'
 // 新增Message导入
 import { ElMessage } from 'element-plus'
 import { Microphone, Mute } from '@element-plus/icons-vue'
@@ -11,8 +11,12 @@ const fileList = ref([]) // 存储上传的文件列表
 // 初始化语音识别实例和监听状态
 // 标记是否正在监听语音
 const isListening = ref(false)
+// 标记语音识别实例是否真正可用（已完全停止）
+const isRecognitionAvailable = ref(true)
 // 存储语音识别实例
 const recognition = ref(null)
+// 存储超时计时器
+const recognitionTimeout = ref(null)
 // 定义组件的 props，接收 loading 状态
 const props = defineProps({
   loading: {
@@ -72,29 +76,168 @@ const handleFileRemove = (file) => {
   }
 }
 
+// 强制停止语音识别
+const forceStopRecognition = () => {
+  console.log('强制停止语音识别');
+  try {
+    // 清除超时计时器
+    if (recognitionTimeout.value) {
+      clearTimeout(recognitionTimeout.value);
+      recognitionTimeout.value = null;
+    }
 
+    // 停止识别
+    if (recognition.value) {
+      recognition.value.stop();
+      // 某些浏览器可能需要调用 abort() 方法
+      recognition.value.abort();
+    }
+  } catch (error) {
+    console.error('强制停止语音识别失败:', error);
+  } finally {
+    // 直接重置状态，不依赖 onend 事件
+    isListening.value = false;
+    isRecognitionAvailable.value = true;
+  }
+};
 
-// 切换语音识别状态
-const toggleSpeechRecognition = () => {
-  if (isListening.value) {
-    recognition.value?.stop()
-    isListening.value = false
-  } else {
-    if (!recognition.value) {
-      recognition.value = initSpeechRecognition()
-      if (!recognition.value) return
+// 初始化语音识别实例
+const initSpeechRecognition = () => {
+  // 检查浏览器是否支持语音识别
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    ElMessage.error('您的浏览器不支持语音识别功能');
+    return null;
+  }
 
-      recognition.value.onresult = handleSpeechResult
-      recognition.value.onerror = handleSpeechError
-      recognition.value.onend = () => {
-        isListening.value = false
+  const recognition = new SpeechRecognition();
+  recognition.continuous = false; // 只识别一次
+  recognition.interimResults = true; // 返回中间结果，便于调试
+  recognition.lang = 'zh-CN'; // 设置为中文
+  recognition.maxAlternatives = 1; // 只返回一个结果
+
+  // 添加事件监听
+  recognition.onstart = () => {
+    console.log('语音识别已开始');
+    isListening.value = true;
+    isRecognitionAvailable.value = false;
+
+    // 设置超时，10秒后自动停止识别
+    recognitionTimeout.value = setTimeout(() => {
+      console.log('语音识别超时，自动停止');
+      forceStopRecognition();
+      ElMessage.info('语音识别已超时自动停止');
+    }, 10000);
+  };
+
+  recognition.onend = () => {
+    console.log('语音识别已结束');
+    // 清除超时计时器
+    if (recognitionTimeout.value) {
+      clearTimeout(recognitionTimeout.value);
+      recognitionTimeout.value = null;
+    }
+    isListening.value = false;
+    isRecognitionAvailable.value = true;
+  };
+
+  recognition.onerror = (event) => {
+    console.error('语音识别错误:', event.error);
+    // 清除超时计时器
+    if (recognitionTimeout.value) {
+      clearTimeout(recognitionTimeout.value);
+      recognitionTimeout.value = null;
+    }
+
+    // 根据错误类型显示不同的提示
+    switch (event.error) {
+      case 'not-allowed':
+        ElMessage.error('麦克风权限被拒绝，请在浏览器设置中允许麦克风访问');
+        break;
+      case 'aborted':
+        console.log('语音识别被中止');
+        break;
+      default:
+        ElMessage.error('语音识别失败，请重试');
+    }
+
+    isListening.value = false;
+    isRecognitionAvailable.value = true;
+  };
+
+  recognition.onresult = (event) => {
+    console.log('语音识别结果事件:', event);
+
+    // 处理识别结果
+    let finalTranscript = '';
+    let interimTranscript = '';
+
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        finalTranscript += transcript;
+      } else {
+        interimTranscript += transcript;
       }
     }
 
-    isListening.value = true
-    recognition.value.start()
+    console.log('最终识别结果:', finalTranscript);
+    console.log('中间识别结果:', interimTranscript);
+
+    // 更新输入框内容
+    if (finalTranscript) {
+      inputValue.value += finalTranscript;
+      console.log('输入框内容已更新:', inputValue.value);
+
+      // 识别到最终结果后，自动停止识别
+      forceStopRecognition();
+    }
+  };
+
+  return recognition;
+};
+
+// 切换语音识别状态
+const toggleSpeechRecognition = () => {
+  console.log('切换语音识别状态，当前状态:', isListening.value, '是否可用:', isRecognitionAvailable.value);
+
+  if (isListening.value) {
+    // 如果正在监听，停止识别
+    forceStopRecognition();
+  } else {
+    // 如果未在监听，且识别器可用，启动识别
+    if (isRecognitionAvailable.value) {
+      if (!recognition.value) {
+        console.log('初始化语音识别实例');
+        recognition.value = initSpeechRecognition();
+        if (!recognition.value) return;
+      }
+
+      try {
+        console.log('启动语音识别');
+        recognition.value.start();
+      } catch (error) {
+        console.error('启动语音识别失败:', error);
+        forceStopRecognition();
+        ElMessage.error('语音识别启动失败，请重试');
+      }
+    } else {
+      console.log('语音识别器不可用，正在等待停止');
+      ElMessage.warning('语音识别正在关闭，请稍候再试');
+    }
   }
-}
+};
+
+// 组件卸载时清理资源
+onUnmounted(() => {
+  // 强制停止语音识别
+  forceStopRecognition();
+
+  // 释放文件 URL
+  fileList.value.forEach(file => {
+    URL.revokeObjectURL(file.url);
+  });
+});
 </script>
 
 <template>
@@ -133,7 +276,7 @@ const toggleSpeechRecognition = () => {
     <div class="button-group">
       <!-- 语音识别按钮 -->
       <button class="action-btn voice-btn" :class="{ 'listening': isListening }" @click="toggleSpeechRecognition"
-        :disabled="props.loading">
+        :disabled="props.loading || !isRecognitionAvailable">
         <el-icon v-if="!isListening" size="20px">
           <Microphone />
         </el-icon>
