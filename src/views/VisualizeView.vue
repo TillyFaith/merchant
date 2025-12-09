@@ -1,6 +1,6 @@
 <script setup>
 import { DataAnalysis } from '@element-plus/icons-vue'
-import KnowledgeHeatmap from '@/components/KnowledgeHeatmap.vue'
+// import KnowledgeHeatmap from '@/components/KnowledgeHeatmap.vue'
 import HighFrequencyQuestions from '@/components/HighFrequencyQuestions.vue'
 import ZeroHitQuestions from '@/components/ZeroHitQuestions.vue'
 import Top5Documents from '@/components/Top5Documents.vue'
@@ -38,7 +38,6 @@ const loadVisualizationData = async () => {
     loading.value = false
   }
 }
-
 // 新增：组件挂载时加载数据
 onMounted(() => {
   loadVisualizationData()
@@ -72,18 +71,17 @@ onMounted(() => {
               </el-icon>
               <span>数据可视化</span>
             </template>
-            <el-menu-item index="1-1">知识点热力图</el-menu-item>
+            <!-- <el-menu-item index="1-1">知识点热力图</el-menu-item> -->
             <el-menu-item index="1-2">高频问题Top10</el-menu-item>
             <el-menu-item index="1-3">零命中问题列表</el-menu-item>
             <el-menu-item index="1-4">Top5引用文档</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>
-      <el-main class="app-main">
-        <!-- 新增：加载状态显示 -->
-        <el-loading v-if="loading" target=".app-main" text="数据加载中..." />
 
-        <el-row :gutter="20">
+      <el-main class="app-main" v-loading="loading" element-loading-text="数据加载中...">
+
+        <!-- <el-row :gutter="20">
           <el-col :span="24">
             <el-card shadow="hover">
               <template #header>
@@ -91,11 +89,10 @@ onMounted(() => {
                   <span>知识点热力图</span>
                 </div>
               </template>
-              <!-- 修改：传递热力图数据 -->
               <KnowledgeHeatmap :data="visualizationStore.heatmapData" />
             </el-card>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row :gutter="20" style="margin-top: 20px;">
           <el-col :span="12">
             <el-card shadow="hover">
@@ -105,7 +102,7 @@ onMounted(() => {
                 </div>
               </template>
               <!-- 修改：传递高频问题数据 -->
-              <HighFrequencyQuestions :data="visualizationStore.top10Data" />
+              <HighFrequencyQuestions />
             </el-card>
           </el-col>
           <el-col :span="12">
@@ -116,7 +113,7 @@ onMounted(() => {
                 </div>
               </template>
               <!-- 修改：传递热门文档数据 -->
-              <Top5Documents :data="visualizationStore.top5DocsData" />
+              <Top5Documents />
             </el-card>
           </el-col>
         </el-row>
@@ -129,7 +126,7 @@ onMounted(() => {
                 </div>
               </template>
               <!-- 修改：传递零命中问题数据 -->
-              <ZeroHitQuestions :data="visualizationStore.noHitData" />
+              <ZeroHitQuestions />
             </el-card>
           </el-col>
         </el-row>

@@ -1,12 +1,12 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { useKnowledgeStore } from '@/stores/knowledge'
+
 import { useRouter } from 'vue-router'
 import { UploadFilled, Edit, Delete, Search, Histogram } from '@element-plus/icons-vue';
 import sideMenu from '@/components/SideMenu.vue'
 import { initialCategories } from '@/constants/categories'
-// 知识存储
+import { useKnowledgeStore } from '@/stores/knowledge'
 const knowledgeStore = useKnowledgeStore()
 const categories = initialCategories || []
 const getScenesByBusiness = (businessId) => {

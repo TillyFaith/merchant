@@ -1,7 +1,7 @@
 <script setup>
 import ChatInput from '@/components/ChatInput.vue'
 import ChatMessage from '@/components/ChatMessage.vue'
-import { Document, Histogram, Plus } from '@element-plus/icons-vue'
+import { Document, Histogram, Edit } from '@element-plus/icons-vue'
 import { computed, ref, watch, nextTick, onMounted } from 'vue'
 import { useChatStore } from '@/stores/chat'
 import { messageHandler } from '@/utils/messageHandler'
@@ -56,7 +56,6 @@ const handleSend = async (messageContent) => {
     // 使用组件中的响应式chatId，而非局部变量
     let chatId = localStorage.getItem('chatId') || ''
     const query = messageContent.text
-    console.log('此时 chatId', chatId)
     // 调用API获取回复
     const response = await createChatCompletion(chatId, query)
 
@@ -132,6 +131,10 @@ const handleBack = async () => {
 const navigateToKnowledgeManagement = () => {
   router.push('/knowledge')
 }
+// 导航到可视化视图
+const navigateToVisualization = () => {
+  router.push('/visualization')
+}
 </script>
 
 <template>
@@ -141,7 +144,7 @@ const navigateToKnowledgeManagement = () => {
     <div class="chat-header">
       <div class="header-left">
         <PopupMenu ref="popupMenu" />
-        <el-button class="new-chat-btn" :icon="Plus" @click="handleNewChat">新对话</el-button>
+        <el-button class="new-chat-btn" :icon="Edit" @click="handleNewChat">新对话</el-button>
         <div class="divider"></div>
         <div class="title-wrapper">
           <h1 class="chat-title">{{ formatTitle(currentTitle) }}</h1>
@@ -158,7 +161,7 @@ const navigateToKnowledgeManagement = () => {
           </button>
         </el-tooltip>
         <el-tooltip content=" 数据可视化" placement="top">
-          <button class="action-btn" @click="handleBack">
+          <button class="action-btn" @click="navigateToVisualization">
             <Histogram style="width: 20px; height: 20px;"></Histogram>
           </button>
         </el-tooltip>
@@ -180,8 +183,8 @@ const navigateToKnowledgeManagement = () => {
       <div v-else class="empty-state">
         <div class="empty-content">
           <img src="@/assets/photo/对话.png" alt="chat" class="empty-icon" />
-          <h2>开始对话吧</h2>
-          <p>商家知识管理系统智能助手，您可以向我提问，我会尽力为您解答。</p>
+          <h2>开始提问吧</h2>
+          <p>我是抖音商家知识管理系统智能助手，您可以向我提问，我会尽力为您解答。</p>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { useSettingStore } from '@/stores/setting'
 // const API_BASE_URL = 'https://api.siliconflow.cn/v1'
 // 修改为相对路径，通过代理访问
 // const BASE_URL = '/api'
-const BASE_URL = 'http://8.136.47.218'
+const BASE_URL = 'http://8.136.47.218:80'
 
 // 获取当前业务和场景的文档列表
 export const getDocList = async (business, scene) => {
@@ -251,7 +251,7 @@ export const getNoHitData = async () => {
 
   const data = await response.json()
   if (!data.ok) {
-    throw new Error(data.message || '获取 未名中问题数据失败')
+    throw new Error(data.message || '获取未命中问题数据失败')
   }
   return data.data
 }

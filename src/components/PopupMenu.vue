@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { Plus } from '@element-plus/icons-vue'
+import { Edit } from '@element-plus/icons-vue'
 import { useChatStore } from '@/stores/chat'
 import DialogEdit from '@/components/DialogEdit.vue'
 
@@ -60,40 +60,29 @@ defineExpose({
       <img src="@/assets/photo/弹出框.png" alt="" />
     </button>
     <!-- 弹出框 -->
-    <Transition
-      enter-active-class="animate__animated animate__fadeInLeft"
-      leave-active-class="animate__animated animate__fadeOutLeft"
-    >
+    <Transition enter-active-class="animate__animated animate__fadeInLeft"
+      leave-active-class="animate__animated animate__fadeOutLeft">
       <div class="popup-menu" v-show="isVisible">
         <div class="menu-section">
-          <el-button class="new-chat-btn" :icon="Plus" @click="handleNewChat">新对话</el-button>
+          <el-button class="new-chat-btn" :icon="Edit" @click="handleNewChat">
+            新对话</el-button>
         </div>
         <div class="divider"></div>
         <div class="menu-section">
           <div class="section-title">历史对话</div>
           <div class="history-list">
-            <div
-              v-for="conversation in chatStore.conversations"
-              :key="conversation.id"
-              class="menu-item"
+            <div v-for="conversation in chatStore.conversations" :key="conversation.id" class="menu-item"
               :class="{ active: conversation.id === chatStore.currentConversationId }"
-              @click="handleSwitchChat(conversation.id)"
-            >
+              @click="handleSwitchChat(conversation.id)">
               <div class="item-content">
                 <img src="@/assets/photo/对话.png" alt="" />
                 <span :title="conversation.title">{{ formatTitle(conversation.title) }}</span>
               </div>
               <div class="item-actions">
-                <button
-                  class="action-btn"
-                  @click.stop="dialogEdit.openDialog(conversation.id, 'edit')"
-                >
+                <button class="action-btn" @click.stop="dialogEdit.openDialog(conversation.id, 'edit')">
                   <img src="@/assets/photo/编辑.png" alt="edit" />
                 </button>
-                <button
-                  class="action-btn"
-                  @click.stop="dialogEdit.openDialog(conversation.id, 'delete')"
-                >
+                <button class="action-btn" @click.stop="dialogEdit.openDialog(conversation.id, 'delete')">
                   <img src="@/assets/photo/删除.png" alt="delete" />
                 </button>
               </div>
@@ -166,62 +155,92 @@ defineExpose({
     }
 
     .menu-item {
-      display: flex; /* 使用 flex 布局 */
-      align-items: center; /* 垂直居中对齐 */
-      justify-content: space-between; /* 两端对齐，中间留空 */
-      padding: 0.5rem 1rem; /* 内边距：上下 8px，左右 16px */
-      cursor: pointer; /* 鼠标指针样式为手型 */
-      transition: background-color 0.2s; /* 背景色过渡动画 */
+      display: flex;
+      /* 使用 flex 布局 */
+      align-items: center;
+      /* 垂直居中对齐 */
+      justify-content: space-between;
+      /* 两端对齐，中间留空 */
+      padding: 0.5rem 1rem;
+      /* 内边距：上下 8px，左右 16px */
+      cursor: pointer;
+      /* 鼠标指针样式为手型 */
+      transition: background-color 0.2s;
+      /* 背景色过渡动画 */
 
       /* 左侧内容区域样式 */
       .item-content {
-        display: flex; /* 使用 flex 布局 */
-        align-items: center; /* 垂直居中对齐 */
-        gap: 0.5rem; /* 元素间距 8px */
+        display: flex;
+        /* 使用 flex 布局 */
+        align-items: center;
+        /* 垂直居中对齐 */
+        gap: 0.5rem;
+        /* 元素间距 8px */
 
         /* 对话图标样式 */
         img {
-          width: 1rem; /* 图标宽度 16px */
-          height: 1rem; /* 图标高度 16px */
+          width: 1rem;
+          /* 图标宽度 16px */
+          height: 1rem;
+          /* 图标高度 16px */
         }
 
         /* 对话标题文本样式 */
         span {
-          font-size: 0.875rem; /* 文字大小 14px */
-          color: #374151; /* 文字颜色：深灰色 */
+          font-size: 0.875rem;
+          /* 文字大小 14px */
+          color: #374151;
+          /* 文字颜色：深灰色 */
         }
       }
 
       /* 右侧操作按钮区域样式 */
       .item-actions {
-        display: flex; /* 使用 flex 布局 */
-        gap: 0.4rem; /* 按钮间距 4px */
-        opacity: 0; /* 默认隐藏 */
-        transition: opacity 0.2s ease; /* 透明度过渡动画 */
+        display: flex;
+        /* 使用 flex 布局 */
+        gap: 0.4rem;
+        /* 按钮间距 4px */
+        opacity: 0;
+        /* 默认隐藏 */
+        transition: opacity 0.2s ease;
+        /* 透明度过渡动画 */
 
         /* 操作按钮样式 */
         .action-btn {
-          width: 0.9rem; /* 按钮宽度 16px */
-          height: 0.9rem; /* 按钮高度 16px */
-          padding: 0; /* 移除内边距 */
-          border: none; /* 移除边框 */
-          background: none; /* 移除背景色 */
-          cursor: pointer; /* 鼠标指针样式为手型 */
-          display: flex; /* 使用 flex 布局 */
-          align-items: center; /* 垂直居中对齐 */
-          justify-content: center; /* 水平居中对齐 */
-          opacity: 1; /* 默认透明度 */
+          width: 0.9rem;
+          /* 按钮宽度 16px */
+          height: 0.9rem;
+          /* 按钮高度 16px */
+          padding: 0;
+          /* 移除内边距 */
+          border: none;
+          /* 移除边框 */
+          background: none;
+          /* 移除背景色 */
+          cursor: pointer;
+          /* 鼠标指针样式为手型 */
+          display: flex;
+          /* 使用 flex 布局 */
+          align-items: center;
+          /* 垂直居中对齐 */
+          justify-content: center;
+          /* 水平居中对齐 */
+          opacity: 1;
+          /* 默认透明度 */
           transition: filter 0.2s;
 
           /* 按钮图标样式 */
           img {
-            width: 100%; /* 图标占满按钮宽度 */
-            height: 100%; /* 图标占满按钮高度 */
+            width: 100%;
+            /* 图标占满按钮宽度 */
+            height: 100%;
+            /* 图标占满按钮高度 */
           }
 
           /* 按钮悬停效果 */
           &:hover {
-            filter: brightness(0.4); /* 使用 brightness 滤镜来加深颜色 */
+            filter: brightness(0.4);
+            /* 使用 brightness 滤镜来加深颜色 */
           }
         }
       }
@@ -229,7 +248,8 @@ defineExpose({
       /* 菜单项悬停和选中状态 */
       &:hover,
       &.active {
-        background-color: #e5e7eb; /* 背景色：浅灰色 */
+        background-color: #e5e7eb;
+        /* 背景色：浅灰色 */
 
         /* 显示操作按钮 */
         .item-actions {
@@ -239,25 +259,37 @@ defineExpose({
 
       /* 当前选中项的特殊样式 */
       &.active {
-        background-color: #e5e7eb; /* 背景色：浅灰色 */
-        position: relative; /* 相对定位，用于放置指示条 */
+        background-color: #e5e7eb;
+        /* 背景色：浅灰色 */
+        position: relative;
+        /* 相对定位，用于放置指示条 */
 
         /* 左侧蓝色指示条 */
         &::before {
-          content: ''; /* 伪元素内容 */
-          position: absolute; /* 绝对定位 */
-          left: 0; /* 靠左对齐 */
-          top: 0; /* 靠上对齐 */
-          bottom: 0; /* 延伸到底部 */
-          width: 3px; /* 指示条宽度 */
-          background-color: #3f7af1; /* 指示条颜色：蓝色 */
-          border-radius: 0 2px 2px 0; /* 右侧圆角 */
+          content: '';
+          /* 伪元素内容 */
+          position: absolute;
+          /* 绝对定位 */
+          left: 0;
+          /* 靠左对齐 */
+          top: 0;
+          /* 靠上对齐 */
+          bottom: 0;
+          /* 延伸到底部 */
+          width: 3px;
+          /* 指示条宽度 */
+          background-color: #3f7af1;
+          /* 指示条颜色：蓝色 */
+          border-radius: 0 2px 2px 0;
+          /* 右侧圆角 */
         }
 
         /* 选中项的文本样式 */
         span {
-          color: #3f7af1; /* 文字颜色：蓝色 */
-          font-weight: 500; /* 字重：中等 */
+          color: #3f7af1;
+          /* 文字颜色：蓝色 */
+          font-weight: 500;
+          /* 字重：中等 */
         }
       }
     }

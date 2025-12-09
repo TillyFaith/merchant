@@ -3,16 +3,35 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import * as echarts from 'echarts'
-import { top5Documents } from '../utils/mockData'
+// import { top5Documents } from '../utils/mockData'
+import { useDataVisualizationStore } from '@/stores/dataVisualization'
+
+
 
 const chartRef = ref(null)
 let chartInstance = null
 
-onMounted(() => {
-  chartInstance = echarts.init(chartRef.value)
+const dataVisualizationStore = useDataVisualizationStore()
+// 添加默认值保护
+const top5Documents = ref(dataVisualizationStore.top5DocsData.value || [])
 
+// 响应式监听数据变化
+watch(
+  () => dataVisualizationStore.top5DocsData.value,
+  (newValue) => {
+    top5Documents.value = Array.isArray(newValue) ? newValue : []
+    initChart() // 数据变化时重新初始化图表
+  },
+  { immediate: true }
+)
+
+const initChart = () => {
+  if (!chartRef.value || !top5Documents.value.length) return
+
+  chartInstance = echarts.init(chartRef.value)
+  if (!top5Documents) return
   const names = top5Documents.map(item => item.name)
   const counts = top5Documents.map(item => item.count)
 
@@ -61,7 +80,7 @@ onMounted(() => {
 
   chartInstance.setOption(option)
   window.addEventListener('resize', handleResize)
-})
+}
 
 const handleResize = () => {
   chartInstance?.resize()
