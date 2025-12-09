@@ -1,24 +1,24 @@
 <template>
   <el-container class="app-container">
-    <el-header style="margin-top: 10px;">
-      <div class="knowledge-header" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background-color: white; padding: 0 20px;
-      height: 60px; align-items: center;">
-        <img src="@/assets/photo/logo_dark.svg" alt="Logo" style="height: 40px; margin-right: 100px;">
+    <el-header style="padding: 0;">
+      <div class="knowledge-header"
+        style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background-color: white; padding: 0 20px; height: 60px; align-items: center; display: flex;">
+        <img src="@/assets/photo/logo_dark.svg" alt="Logo" style="height: 40px; margin-right: 20px;">
+        <div class="header-title" style="font-size: 18px; font-weight: 500; margin-right: auto;"></div>
         <div class="action-buttons">
-          <el-button class="action-btn" style="position: absolute; right: 200px;"
-            @click="navigateToKnowledgeManagement">
-            <Document style="width: 20px; height: 20px; margin-right: 10px;" /> 知识文档管理
+          <el-button class="action-btn" @click="navigateToKnowledgeManagement">
+            <Document style="width: 18px; height: 18px; margin-right: 5px;" /> 知识文档管理
           </el-button>
-          <el-button style="position: absolute; right: 50px;" class="action-btn" @click="handleBack">
-            <img style="width: 22px; height: 22px; margin-right: 10px;" src="@/assets/photo/返回.png" alt="back" />
-            回到首页
+          <el-button class="action-btn" @click="handleBack">
+            <img style="width: 18px; height: 18px; margin-right: 5px;" src="@/assets/photo/返回.png" alt="back" /> 回到首页
           </el-button>
         </div>
       </div>
     </el-header>
     <el-container>
       <el-aside width="200px" class="app-aside">
-        <el-menu :default-openeds="['1']">
+        <el-menu :default-openeds="['1']" background-color="#ffffff" text-color="#303133" active-text-color="#409eff"
+          class="no-border-menu">
           <el-sub-menu index="1">
             <template #title>
               <el-icon>
@@ -26,20 +26,24 @@
               </el-icon>
               <span>数据可视化</span>
             </template>
-            <!-- <el-menu-item index="1-1">知识点热力图</el-menu-item> -->
-
-            <el-menu-item index="1-3">零命中问题列表</el-menu-item>
-            <el-menu-item index="1-4">知识文档热力图</el-menu-item>
-            <el-menu-item index="1-2">高频问题Top10</el-menu-item>
+            <el-menu-item index="1-1">高频问题Top10</el-menu-item>
+            <el-menu-item index="1-2">零命中问题列表</el-menu-item>
+            <el-menu-item index="1-3">知识文档热力图</el-menu-item>
           </el-sub-menu>
         </el-menu>
+        <!-- 智能助理图标 -->
+        <div class="chatbot" @click="handleChatbotClick">
+          <img style="width: 30px; height: 30px;" src="@/assets/photo/robot.png" alt="robot" />
+          <img style="margin-left: 10px; width: 64px; height: 20px;" src="@/assets/photo/robot_describe.JPG"
+            alt="robot_describe" />
+        </div>
       </el-aside>
 
-      <el-main class="app-main" element-loading-text="数据加载中...">
+      <el-main class="app-main" style="padding: 0 20px; background-color: #f5f7fa;">
         <!-- 零命中问题列表 - 单独一行 -->
         <el-row :gutter="20" style="margin-top: 20px;">
           <el-col :span="24">
-            <el-card shadow="hover">
+            <el-card shadow="always">
               <template #header>
                 <div class="card-header">
                   <span>零命中问题列表</span>
@@ -55,7 +59,7 @@
             <el-card shadow="hover">
               <template #header>
                 <div class="card-header">
-                  <span>Top5引用文档</span>
+                  <span>知识文档热力图</span>
                 </div>
               </template>
               <Top5Documents :data="top5DocsData" />
@@ -136,51 +140,41 @@ onMounted(async () => {
 <style scoped>
 .knowledge-header {
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
-  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0);
 }
 
 .action-buttons {
   display: flex;
   gap: 10px;
-
-  .action-button {
-    width: 1px;
-    height: 1px;
-  }
 }
 
-.app-container {
-  height: 100vh;
+.action-btn {
+  margin-left: 10px;
 }
 
-.app-header {
-  background-color: #409eff;
-  color: white;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.app-header h1 {
-  margin: 0;
-  font-size: 20px;
-}
-
-.app-aside {
-  background-color: #f5f7fa;
-  border-right: 1px solid #e4e7ed;
+.search-bar {
+  margin-bottom: 20px;
 }
 
 .app-main {
-  background-color: #f0f2f5;
+  min-height: calc(100vh - 60px);
+  padding: 20px;
 }
 
-.card-header {
+/* 去除 el-menu 右边框线 */
+::v-deep .no-border-menu {
+  border-right: none !important;
+}
+
+/* 智能助理图标样式 */
+.chatbot {
+  position: fixed;
+  bottom: 50px;
+  left: 30px;
+  cursor: pointer;
+  z-index: 100;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 </style>
