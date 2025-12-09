@@ -122,12 +122,12 @@ const initSpeechRecognition = () => {
     isListening.value = true;
     isRecognitionAvailable.value = false;
 
-    // 设置超时，10秒后自动停止识别
+    // 设置超时，30秒后自动停止识别
     recognitionTimeout.value = setTimeout(() => {
       console.log('语音识别超时，自动停止');
       forceStopRecognition();
       ElMessage.info('语音识别已超时自动停止');
-    }, 10000);
+    }, 30000);
   };
 
   recognition.onend = () => {
@@ -275,13 +275,13 @@ onUnmounted(() => {
       @keydown.enter.shift="handleNewline" />
     <div class="button-group">
       <!-- 语音识别按钮 -->
-      <button class="action-btn voice-btn" :class="{ 'listening': isListening }" @click="toggleSpeechRecognition"
+      <button class="action-btn voice-btn" :class="{ 'listening': isListening }"
         :disabled="props.loading || !isRecognitionAvailable">
         <el-icon v-if="!isListening" size="20px">
-          <Microphone />
+          <Microphone @click="toggleSpeechRecognition" />
         </el-icon>
         <el-icon v-else size="20px">
-          <Mute />
+          <Mute @click="forceStopRecognition" />
         </el-icon>
       </button>
 
