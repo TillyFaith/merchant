@@ -13,28 +13,63 @@ export const useDataVisualizationStore = defineStore('dataVisualization', () => 
   // 删除：移除未使用的trendData
   const isLoading = ref(false)
 
-  const fetchVisualizationData = async () => {
-    isLoading.value = true
+  // 新增：获取Top10数据的独立方法
+  const fetchTop10Data = async () => {
     try {
-      const [top10Res, noHitRes, top5DocsRes] = await Promise.all([
-        getTop10Data(),
-        getNoHitData(),
-        getTop5RefData(),
-      ])
-      // 添加数据验证
-      top10Data.value = Array.isArray(top10Res.data) ? top10Res.data : []
-      noHitData.value = Array.isArray(noHitRes.data) ? noHitRes.data : []
-      top5DocsData.value = Array.isArray(top5DocsRes.data) ? top5DocsRes.data : []
+      const response = await getTop10Data()
+      // 假设API返回格式为 { data: [...] }，如果不是请根据实际情况调整
+      top10Data.value = Array.isArray(response.data) ? response.data.slice(0, 10) : []
+      console.log('top10Data response:', top10Data.value)
     } catch (error) {
-      console.error('Failed to fetch visualization data:', error)
-      // 错误时确保状态为数组
+      console.error('Failed to fetch top10 data:', error)
       top10Data.value = []
-      noHitData.value = []
-      top5DocsData.value = []
-    } finally {
-      isLoading.value = false
+      throw error // 可以选择抛出错误，让调用者处理
     }
   }
+
+  // 新增：获取零命中数据的独立方法
+  const fetchNoHitData = async () => {
+    try {
+      const response = await getNoHitData()
+      // 假设API返回格式为 { data: [...] }，如果不是请根据实际情况调整
+      noHitData.value = Array.isArray(response.data) ? response.data : []
+      console.log('noHitData response:', noHitData.value)
+    } catch (error) {
+      console.error('Failed to fetch noHit data:', error)
+      noHitData.value = []
+      throw error // 可以选择抛出错误，让调用者处理
+    }
+  }
+
+  // 新增：获取Top5文档数据的独立方法
+  const fetchTop5DocsData = async () => {
+    try {
+      const response = await getTop5RefData()
+
+      // 假设API返回格式为 { data: [...] }，如果不是请根据实际情况调整
+      top5DocsData.value = Array.isArray(response.data) ? response.data : []
+      console.log('top5DocsData response:', top5DocsData.value)
+    } catch (error) {
+      console.error('Failed to fetch top5Docs data:', error)
+      top5DocsData.value = []
+      throw error // 可以选择抛出错误，让调用者处理
+    }
+  }
+
+  // 修改：重写fetchVisualizationData方法，按顺序调用三个独立方法
+  // const fetchVisualizationData = async () => {
+  //   isLoading.value = true
+  //   try {
+  //     // 按顺序调用三个方法，也可以根据需要并行调用
+  //     await fetchNoHitData()
+  //     await fetchTop5DocsData()
+  //     // await fetchTop10Data()
+  //   } catch (error) {
+  //     console.error('Failed to fetch visualization data:', error)
+  //   } finally {
+  //     isLoading.value = false
+  //   }
+  // }
 
   return {
     // heatmapData,
@@ -42,6 +77,9 @@ export const useDataVisualizationStore = defineStore('dataVisualization', () => 
     noHitData,
     top5DocsData, // 热门文档数据
     isLoading,
-    fetchVisualizationData,
+    // fetchVisualizationData,
+    fetchTop10Data,
+    fetchNoHitData,
+    fetchTop5DocsData,
   }
 })

@@ -9,6 +9,7 @@ import { initialCategories } from '@/constants/categories'
 import { useKnowledgeStore } from '@/stores/knowledge'
 const knowledgeStore = useKnowledgeStore()
 const categories = initialCategories || []
+console.log('documents:', knowledgeStore.documents)
 const getScenesByBusiness = (businessId) => {
   const category = categories.find(cat => cat.id === businessId)
   return category?.children || []

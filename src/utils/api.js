@@ -209,7 +209,7 @@ export const getTop10Data = async () => {
   if (!data.ok) {
     throw new Error(data.message || '获取高频问题Top10数据失败')
   }
-  return data.data
+  return data
 }
 
 /**
@@ -231,7 +231,7 @@ export const getTop5RefData = async () => {
   if (!data.ok) {
     throw new Error(data.message || '获取top5引用文档数据失败')
   }
-  return data.data
+  return data
 }
 
 /**
@@ -253,5 +253,5 @@ export const getNoHitData = async () => {
   if (!data.ok) {
     throw new Error(data.message || '获取未命中问题数据失败')
   }
-  return data.data
+  return data
 }

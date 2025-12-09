@@ -3,18 +3,29 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import * as echarts from 'echarts'
-import { highFrequencyQuestions } from '../utils/mockData'
+// import { highFrequencyQuestions } from '../utils/mockData'
 
+const props = defineProps({
+  data: {
+    type: Array,
+    default: () => [] // 提供默认值，避免空数据问题
+  }
+})
+const highFrequencyQuestions = computed(() => {
+  return props.data
+})
 const chartRef = ref(null)
 let chartInstance = null
 
 onMounted(() => {
   chartInstance = echarts.init(chartRef.value)
-
+  let sortedData = []
   // 处理数据，按次数降序排列
-  const sortedData = [...highFrequencyQuestions].sort((a, b) => b.count - a.count)
+  if (highFrequencyQuestions.value.length) {
+    sortedData = [...highFrequencyQuestions.value].sort((a, b) => b.count - a.count)
+  }
   const questions = sortedData.map(item => item.question)
   const counts = sortedData.map(item => item.count)
 

@@ -1,48 +1,3 @@
-<script setup>
-import { DataAnalysis } from '@element-plus/icons-vue'
-// import KnowledgeHeatmap from '@/components/KnowledgeHeatmap.vue'
-import HighFrequencyQuestions from '@/components/HighFrequencyQuestions.vue'
-import ZeroHitQuestions from '@/components/ZeroHitQuestions.vue'
-import Top5Documents from '@/components/Top5Documents.vue'
-import { useRouter } from 'vue-router'
-import { Document } from '@element-plus/icons-vue'
-// 新增：导入store和响应式相关依赖
-import { useDataVisualizationStore } from '@/stores/dataVisualization'
-import { onMounted, ref } from 'vue'
-import { ElMessage } from 'element-plus'
-
-// 获取路由实例
-const router = useRouter()
-// 新增：获取数据可视化store实例
-const visualizationStore = useDataVisualizationStore()
-// 新增：定义加载状态
-const loading = ref(true)
-
-// 导航到知识文档管理页面
-const navigateToKnowledgeManagement = () => {
-  router.push('/knowledge')
-}
-// 处理返回首页
-const handleBack = () => {
-  router.push('/')
-}
-
-// 新增：加载可视化数据
-const loadVisualizationData = async () => {
-  try {
-    loading.value = true
-    await visualizationStore.fetchVisualizationData()
-  } catch (error) {
-    ElMessage.error('数据加载失败：' + error.message)
-  } finally {
-    loading.value = false
-  }
-}
-// 新增：组件挂载时加载数据
-onMounted(() => {
-  loadVisualizationData()
-})
-</script>
 <template>
   <el-container class="app-container">
     <el-header style="margin-top: 10px;">
@@ -79,44 +34,36 @@ onMounted(() => {
         </el-menu>
       </el-aside>
 
-      <el-main class="app-main" v-loading="loading" element-loading-text="数据加载中...">
-
-        <!-- <el-row :gutter="20">
-          <el-col :span="24">
-            <el-card shadow="hover">
-              <template #header>
-                <div class="card-header">
-                  <span>知识点热力图</span>
-                </div>
-              </template>
-              <KnowledgeHeatmap :data="visualizationStore.heatmapData" />
-            </el-card>
-          </el-col>
-        </el-row> -->
+      <el-main class="app-main" element-loading-text="数据加载中...">
+        <!-- 高频问题Top10 - 单独一行 -->
         <el-row :gutter="20" style="margin-top: 20px;">
-          <el-col :span="12">
+          <el-col :span="24"> <!-- 修改为24格，占满整行 -->
             <el-card shadow="hover">
               <template #header>
                 <div class="card-header">
                   <span>高频问题Top10</span>
                 </div>
               </template>
-              <!-- 修改：传递高频问题数据 -->
-              <HighFrequencyQuestions />
+              <HighFrequencyQuestions :data="top10Data" />
             </el-card>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+
+        <!-- Top5引用文档 - 单独一行 -->
+        <el-row :gutter="20" style="margin-top: 20px;">
+          <el-col :span="24"> <!-- 修改为24格，占满整行 -->
             <el-card shadow="hover">
               <template #header>
                 <div class="card-header">
                   <span>Top5引用文档</span>
                 </div>
               </template>
-              <!-- 修改：传递热门文档数据 -->
-              <Top5Documents />
+              <Top5Documents :data="top5DocsData" />
             </el-card>
           </el-col>
         </el-row>
+
+        <!-- 零命中问题列表 - 单独一行 -->
         <el-row :gutter="20" style="margin-top: 20px;">
           <el-col :span="24">
             <el-card shadow="hover">
@@ -125,8 +72,7 @@ onMounted(() => {
                   <span>零命中问题列表</span>
                 </div>
               </template>
-              <!-- 修改：传递零命中问题数据 -->
-              <ZeroHitQuestions />
+              <ZeroHitQuestions :data="noHitData" />
             </el-card>
           </el-col>
         </el-row>
@@ -135,7 +81,58 @@ onMounted(() => {
   </el-container>
 </template>
 
+<script setup>
+import { DataAnalysis } from '@element-plus/icons-vue'
+// import KnowledgeHeatmap from '@/components/KnowledgeHeatmap.vue'
+import HighFrequencyQuestions from '@/components/HighFrequencyQuestions.vue'
+import ZeroHitQuestions from '@/components/ZeroHitQuestions.vue'
+import Top5Documents from '@/components/Top5Documents.vue'
+import { useRouter } from 'vue-router'
+import { Document } from '@element-plus/icons-vue'
+// 新增：导入store和响应式相关依赖
+import { useDataVisualizationStore } from '@/stores/dataVisualization'
+import { onMounted, ref, computed } from 'vue'
+// import { ElMessage } from 'element-plus'
 
+// 获取路由实例
+const router = useRouter()
+// 新增：获取数据可视化store实例
+const visualizationStore = useDataVisualizationStore()
+// 新增：定义加载状态
+// const loading = ref(true)
+
+const top10Data = computed(() => visualizationStore.top10Data)
+const noHitData = computed(() => visualizationStore.noHitData)
+const top5DocsData = computed(() => visualizationStore.top5DocsData)
+// 导航到知识文档管理页面
+const navigateToKnowledgeManagement = () => {
+  router.push('/knowledge')
+}
+// 处理返回首页
+const handleBack = () => {
+  router.push('/')
+}
+
+// 新增：加载可视化数据
+// const loadVisualizationData = async () => {
+//   try {
+//     loading.value = true
+//     await visualizationStore.fetchVisualizationData()
+//   } catch (error) {
+//     ElMessage.error('数据加载失败：' + error.message)
+//   } finally {
+//     loading.value = false
+//   }
+// }
+console.log('view 中top10Data', visualizationStore.top10Data)
+// 新增：组件挂载时加载数据
+onMounted(async () => {
+  // await loadVisualizationData()
+  await visualizationStore.fetchNoHitData()
+  await visualizationStore.fetchTop5DocsData()
+  await visualizationStore.fetchTop10Data()
+})
+</script>
 
 <style scoped>
 .knowledge-header {
@@ -179,7 +176,6 @@ onMounted(() => {
 }
 
 .app-main {
-  padding: 20px;
   background-color: #f0f2f5;
 }
 
