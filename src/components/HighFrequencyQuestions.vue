@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import * as echarts from 'echarts'
 // import { highFrequencyQuestions } from '../utils/mockData'
 
@@ -13,14 +13,20 @@ const props = defineProps({
     default: () => [] // 提供默认值，避免空数据问题
   }
 })
+// 监听父组件数据变化
 const highFrequencyQuestions = computed(() => {
   return props.data
 })
 const chartRef = ref(null)
 let chartInstance = null
 
-onMounted(() => {
-  chartInstance = echarts.init(chartRef.value)
+const initChart = () => {
+  // 检查并销毁已有实例
+  if (chartInstance) {
+    chartInstance.dispose();
+  }
+  // 使用getInstanceByDom复用已有实例
+  chartInstance = echarts.getInstanceByDom(chartRef.value) || echarts.init(chartRef.value);
   let sortedData = []
   // 处理数据，按次数降序排列
   if (highFrequencyQuestions.value.length) {
@@ -79,12 +85,23 @@ onMounted(() => {
 
   chartInstance.setOption(option)
   window.addEventListener('resize', handleResize)
+}
+onMounted(() => {
+  initChart()
 })
 
 const handleResize = () => {
   chartInstance?.resize()
 }
-
+watch(
+  () => props.data,
+  (newData) => {
+    if (newData && newData.length) {
+      initChart()  // 数据变化时重新初始化图表
+    }
+  },
+  { deep: true }
+)
 onUnmounted(() => {
   chartInstance?.dispose()
   window.removeEventListener('resize', handleResize)

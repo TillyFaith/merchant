@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import * as echarts from 'echarts'
 // import { top5Documents } from '../utils/mockData'
 const props = defineProps({
@@ -19,9 +19,13 @@ const top5Documents = computed(() => {
 })
 const chartRef = ref(null)
 let chartInstance = null
-
-onMounted(() => {
-  chartInstance = echarts.init(chartRef.value)
+const initChart = () => {
+  // 修复：检查并销毁已有实例
+  if (chartInstance) {
+    chartInstance.dispose();
+  }
+  // 修复：使用getInstanceByDom复用已有实例
+  chartInstance = echarts.getInstanceByDom(chartRef.value) || echarts.init(chartRef.value);
 
   const names = top5Documents.value.map(item => item.name)
   const counts = top5Documents.value.map(item => item.count)
@@ -71,7 +75,21 @@ onMounted(() => {
 
   chartInstance.setOption(option)
   window.addEventListener('resize', handleResize)
+}
+onMounted(() => {
+  initChart()
 })
+
+// 添加数据监听
+watch(
+  () => props.data,
+  (newData) => {
+    if (newData && newData.length) {
+      initChart()  // 数据变化时重新初始化图表
+    }
+  },
+  { deep: true }
+)
 
 const handleResize = () => {
   chartInstance?.resize()
