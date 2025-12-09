@@ -3,21 +3,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
-// import { highFrequencyQuestions } from '../utils/mockData'
-import { useDataVisualizationStore } from '@/stores/dataVisualization'
-const dataVisualizationStore = useDataVisualizationStore()
-// 添加默认值保护
-const highFrequencyQuestions = ref(dataVisualizationStore.top10Data.value || [])
+import { highFrequencyQuestions } from '../utils/mockData'
 
-// 移动initChart函数到watch监听器之前
-const initChart = () => {
-  if (!chartRef.value) return
+const chartRef = ref(null)
+let chartInstance = null
 
+onMounted(() => {
   chartInstance = echarts.init(chartRef.value)
+
   // 处理数据，按次数降序排列
-  const sortedData = [...highFrequencyQuestions.value].sort((a, b) => b.count - a.count)
+  const sortedData = [...highFrequencyQuestions].sort((a, b) => b.count - a.count)
   const questions = sortedData.map(item => item.question)
   const counts = sortedData.map(item => item.count)
 
@@ -46,7 +43,7 @@ const initChart = () => {
         fontSize: 12,
         width: 150,
         overflow: 'break',
-        formatter: function(value) {
+        formatter: function (value) {
           return value.length > 15 ? value.substring(0, 15) + '...' : value;
         }
       }
@@ -70,29 +67,7 @@ const initChart = () => {
   }
 
   chartInstance.setOption(option)
-  const resizeHandler = () => {
-    chartInstance.resize()
-  }
-  window.addEventListener('resize', resizeHandler)
-  onUnmounted(() => {
-    window.removeEventListener('resize', resizeHandler)
-    chartInstance.dispose()
-  })
-}
-
-// 响应式监听数据变化
-watch(
-  () => dataVisualizationStore.top10Data.value,
-  (newValue) => {
-    highFrequencyQuestions.value = Array.isArray(newValue) ? newValue : []
-    initChart() // 现在initChart已定义，可以正常调用
-  },
-  { immediate: true }
-)
-
-onMounted(() => {
   window.addEventListener('resize', handleResize)
-  initChart() // 初始调用
 })
 
 const handleResize = () => {

@@ -1,6 +1,6 @@
 export const messageHandler = {
   // 格式化消息，生成标准化的聊天消息对象
-  formatMessage(role, content, reasoning_content = '', files = [], references = []) {
+  formatMessage(role, content, reasoning_content = '', files = [], references = [], title = '') {
     return {
       id: Date.now(),
       role,
@@ -8,6 +8,7 @@ export const messageHandler = {
       reasoning_content, //思考过程
       files,
       references, // 存储引用信息
+      title, // 存储标题信息
       completion_tokens: 0,
       speed: 0,
       loading: false,
@@ -110,6 +111,7 @@ export const messageHandler = {
                 completionTokens,
                 speed,
                 accumulatedReferences, // 新增：传递引用数据
+                accumulatedTitle, // 新增：传递标题信息
               )
             }
 

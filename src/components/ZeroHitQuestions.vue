@@ -12,24 +12,9 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-// import { zeroHitQuestions } from '../utils/mockData'
-import { useDataVisualizationStore } from '@/stores/dataVisualization'
-const dataVisualizationStore = useDataVisualizationStore()
-// 添加默认值保护
-const highFrequencyQuestions = ref(dataVisualizationStore.noHitData.value || [])
-const tableData = ref([])
+import { zeroHitQuestions } from '../utils/mockData'
 
-// 响应式监听数据变化
-watch(
-  () => dataVisualizationStore.noHitData.value,
-  (newValue) => {
-    const safeData = Array.isArray(newValue) ? newValue : []
-    highFrequencyQuestions.value = safeData
-    tableData.value = safeData.filter(item => item.count === 0)
-  },
-  { immediate: true }
-)
+const tableData = zeroHitQuestions
 </script>
 
 <style scoped>
