@@ -9,12 +9,12 @@ const generateId = () => {
 }
 
 export const useChatStore = defineStore(
-  'llm-chat',
+  'chat',
   () => {
     // 所有对话列表
     const initialConversation = {
       id: generateId(),
-      title: '日常问候',
+      title: '日常会话',
       messages: [],
       createdAt: Date.now(),
     }

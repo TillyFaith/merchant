@@ -110,7 +110,7 @@ const handleNewChat = () => {
 }
 
 // 获取当前对话标题
-const currentTitle = computed(() => chatStore.currentConversation?.title || 'LLM Chat')
+const currentTitle = computed(() => chatStore.currentConversation?.title || 'Chat')
 // 格式化标题
 const formatTitle = (title) => {
   return title.length > 4 ? title.slice(0, 4) + '...' : title
@@ -193,9 +193,6 @@ const navigateToVisualization = () => {
     <div class="chat-input-container">
       <chat-input :loading="isLoading" @send="handleSend" />
     </div>
-
-    <!-- 设置面板 -->
-    <!-- <SettingsPanel ref="settingDrawer" /> -->
 
     <!-- 添加对话框组件 -->
     <DialogEdit ref="dialogEdit" />

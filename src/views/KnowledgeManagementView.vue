@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 import { useRouter } from 'vue-router'
-import { UploadFilled, Edit, Delete, Search, Histogram } from '@element-plus/icons-vue';
+import { UploadFilled, Edit, Delete, Search, Histogram, View } from '@element-plus/icons-vue';
 import sideMenu from '@/components/SideMenu.vue'
 import { initialCategories } from '@/constants/categories'
 import { useKnowledgeStore } from '@/stores/knowledge'
@@ -39,6 +39,8 @@ const newDocumentContent = ref('')
 const newDocumentBusiness = ref('')
 // 新建文档场景类型
 const newDocumentScene = ref('')
+// 添加上传方式选择变量
+const uploadMethod = ref('text') // file: 上传文件, text: 手动输入
 
 // 获取过滤后的知识文档
 const filteredDocuments = computed(() => {
@@ -187,7 +189,7 @@ const handleStatusChange = async (docId, newStatus) => {
 // 新增编辑模式相关变量
 const isEditMode = ref(false)
 const currentEditDocId = ref(null)
-const dialogTitle = ref('上传文档')
+const dialogTitle = ref('创建文档')
 
 // 修改编辑按钮处理函数
 const handleEdit = async (docId) => {
@@ -275,8 +277,16 @@ const updateTextDocument = async () => {
             <el-form-item label="标题" required>
               <el-input v-model="newDocumentTitle" placeholder="输入文档标题"></el-input>
             </el-form-item>
-            <el-upload class="upload-demo" action="" :auto-upload="false" :on-change="handleUpload"
-              :show-file-list="true" accept=".pdf,.doc,.docx,.txt">
+            <!-- 添加上传方式选择单选按钮 -->
+            <el-form-item label="创建方式" required>
+              <el-radio-group v-model="uploadMethod" style="margin-left: 10px;">
+                <el-radio label="file" style="margin-right: 20px;">上传文件</el-radio>
+                <el-radio label="text">手动输入文字</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <!-- 根据选择显示上传区域或文本输入区域 -->
+            <el-upload v-if="uploadMethod === 'file'" class="upload-demo" action="" :auto-upload="false"
+              :on-change="handleUpload" :show-file-list="true" accept=".pdf,.doc,.docx,.txt">
               <el-button type="primary">上传文件</el-button>
               <template #tip>
                 <div class="el-upload__tip">
@@ -284,21 +294,24 @@ const updateTextDocument = async () => {
                 </div>
               </template>
             </el-upload>
+            <div class="manual-input-section">
+              <el-form>
+                <el-form-item v-if="uploadMethod === 'text'" label="内容">
+                  <el-input type="textarea" v-model="newDocumentContent" :rows="5" placeholder="输入文档内容"></el-input>
+                </el-form-item>
+                <!-- 修改按钮文本和点击事件 -->
+                <el-button v-if="!isEditMode" type="primary" @click="submitDocument">
+                  创建
+                </el-button>
+                <el-button v-else type="primary" @click="updateTextDocument">
+                  修改
+                </el-button>
+                <el-button @click="() => uploadDialogVisible = false" style="margin-left: 10px;">
+                  取消
+                </el-button>
+              </el-form>
+            </div>
           </el-form>
-          <div class="manual-input-section">
-            <el-form>
-              <el-form-item label="内容">
-                <el-input type="textarea" v-model="newDocumentContent" :rows="5" placeholder="输入文档内容"></el-input>
-              </el-form-item>
-              <!-- 修改按钮文本和点击事件 -->
-              <el-button v-if="!isEditMode" type="primary" @click="submitDocument">
-                创建文档
-              </el-button>
-              <el-button v-else type="primary" @click="updateTextDocument">
-                修改文档
-              </el-button>
-            </el-form>
-          </div>
         </el-dialog>
       </div>
     </div>
@@ -319,7 +332,7 @@ const updateTextDocument = async () => {
               </template>
             </el-table-column>
             <!-- 新增状态栏列 -->
-            <el-table-column label="状态" width="180">
+            <el-table-column label="状态" width="150">
               <template #default="scope">
                 <div style="display: flex; align-items: center;">
                   <el-switch v-model="scope.row.status" :active-value="1" :inactive-value="0"
@@ -332,7 +345,7 @@ const updateTextDocument = async () => {
             </el-table-column>
             <el-table-column label="操作" width="400">
               <template #default="scope">
-                <el-button size="small" @click="navigateToDocument(scope.row.id)">查看</el-button>
+                <el-button size="small" :icon="View" @click="navigateToDocument(scope.row.id)">查看</el-button>
                 <el-button size="small" type="primary" :icon="Edit" @click="handleEdit(scope.row.id)">编辑</el-button>
                 <el-button size="small" type="danger" :icon="Delete" @click="handleDelete(scope.row.id)">删除</el-button>
               </template>

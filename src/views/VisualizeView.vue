@@ -115,7 +115,10 @@ const navigateToKnowledgeManagement = () => {
 const handleBack = () => {
   router.push('/')
 }
-
+const handleChatbotClick = () => {
+  // 点击聊天机器人图标时触发的事件
+  router.push('/chat')
+}
 // 新增：加载可视化数据
 // const loadVisualizationData = async () => {
 //   try {

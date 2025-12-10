@@ -1,33 +1,290 @@
-// 模拟知识点热力图数据
-export const knowledgeHeatmapData = [
-  { id: 1, name: '产品功能介绍', count: 120 },
-  { id: 2, name: 'API使用指南', count: 95 },
-  { id: 3, name: '常见问题解答', count: 88 },
-  { id: 4, name: '故障排查手册', count: 76 },
-  { id: 5, name: '安装配置说明', count: 65 },
-  { id: 6, name: '更新日志', count: 45 },
-  { id: 7, name: '用户协议', count: 32 },
-  { id: 8, name: '隐私政策', count: 28 },
-  { id: 9, name: '开发文档', count: 58 },
-  { id: 10, name: '最佳实践', count: 72 },
-]
-
 // 模拟高频问题Top10数据
-export const highFrequencyQuestions = [
-  { id: 1, question: '如何重置密码？', count: 156 },
-  { id: 2, question: 'API调用失败怎么办？', count: 132 },
-  { id: 3, question: '产品支持哪些浏览器？', count: 108 },
-  { id: 4, question: '如何升级到最新版本？', count: 95 },
-  { id: 5, question: '数据备份方法是什么？', count: 87 },
-  { id: 6, question: '如何添加新用户？', count: 76 },
-  { id: 7, question: '忘记账号怎么办？', count: 68 },
-  { id: 8, question: '如何查看使用统计？', count: 59 },
-  { id: 9, question: 'API密钥如何获取？', count: 52 },
-  { id: 10, question: '如何联系客服？', count: 48 },
+export const top10Data = [
+  {
+    id: '1',
+    question: '英文文本分块的分隔符有哪些？',
+    count: 1,
+  },
+  {
+    id: '2',
+    question: '你好',
+    count: 4,
+  },
+  {
+    id: '3',
+    question: '你是谁',
+    count: 2,
+  },
+  {
+    id: '4',
+    question: '1',
+    count: 15,
+  },
+  {
+    id: '5',
+    question: '商品上架规范',
+    count: 1,
+  },
+  {
+    id: '6',
+    question: '商家入职的流程',
+    count: 1,
+  },
+  {
+    id: '7',
+    question: '商家入驻的路程',
+    count: 1,
+  },
+  {
+    id: '8',
+    question: '商家入驻流程',
+    count: 5,
+  },
+  {
+    id: '9',
+    question: '商家保证金',
+    count: 8,
+  },
+  {
+    id: '10',
+    question: '以上文档的来源是',
+    count: 1,
+  },
+  {
+    id: '11',
+    question: '商品管理',
+    count: 1,
+  },
+  {
+    id: '12',
+    question: '入驻的流程',
+    count: 1,
+  },
+  {
+    id: '13',
+    question: '注意事项',
+    count: 1,
+  },
+  {
+    id: '14',
+    question: '可以使用一代身份证吗',
+    count: 1,
+  },
+  {
+    id: '15',
+    question: '实施细则',
+    count: 1,
+  },
+  {
+    id: '16',
+    question: '文档来源是哪里',
+    count: 1,
+  },
+  {
+    id: '17',
+    question: '我说实施细则的文档来源',
+    count: 1,
+  },
+  {
+    id: '18',
+    question: '现货爆单权益细则',
+    count: 1,
+  },
+  {
+    id: '19',
+    question: '它的注意事项有哪些',
+    count: 1,
+  },
+  {
+    id: '20',
+    question: '入驻规范？',
+    count: 1,
+  },
+  {
+    id: '21',
+    question: '商家入驻规定',
+    count: 1,
+  },
+  {
+    id: '24',
+    question: '商家规范',
+    count: 1,
+  },
+  {
+    id: '25',
+    question: '它的具体内容',
+    count: 1,
+  },
+  {
+    id: '26',
+    question: '资质要求',
+    count: 1,
+  },
+  {
+    id: '27',
+    question: '商家入驻规范',
+    count: 1,
+  },
+  {
+    id: '28',
+    question: '还能展开讲讲吗',
+    count: 1,
+  },
+  {
+    id: '29',
+    question: '它的准入方式',
+    count: 1,
+  },
+  {
+    id: '30',
+    question: '商家质量',
+    count: 2,
+  },
+  {
+    id: '31',
+    question: '商家质量规范',
+    count: 1,
+  },
+  {
+    id: '32',
+    question: '它的证明材料包括他写',
+    count: 3,
+  },
+  {
+    id: '33',
+    question: '它的证明材料包括哪些',
+    count: 1,
+  },
+  {
+    id: '34',
+    question:
+      '电商平台中商品质量问题的定义与分类标准，以及不同业务场景下的处理规范（包括退货退款、换货、赔偿等）',
+    count: 1,
+  },
+  {
+    id: '35',
+    question:
+      '调整后查询：电商知识文档中关于商品质量问题的判定标准与处理规范，包括商品质量不合格的具体定义、责任归属原则、售后处理流程（如退货、换货、退款等）、平台对商家的处罚措施及适用场景',
+    count: 1,
+  },
+  {
+    id: '36',
+    question:
+      '调整后查询：电商知识文档中关于商品质量问题的定义、分类标准及在不同业务场景下的处理规范（如退货退款、换货、补偿等）',
+    count: 1,
+  },
+  {
+    id: '37',
+    question:
+      '调整后查询：电商平台商家质量规范的具体内容包括哪些？涉及商品质量管理、商品信息描述准确性、售后服务履约等方面的规定及实施细则有哪些？',
+    count: 1,
+  },
+  {
+    id: '38',
+    question:
+      '调整后查询：电商平台商家质量管理规范及相关执行标准，涵盖商品质量准入要求、日常品控审核流程、违规行为认定规则及相应处罚措施等具体内容',
+    count: 1,
+  },
+  {
+    id: '39',
+    question:
+      '调整后查询语句：电商知识文档中关于商品质量问题的认定标准及处理规范，涵盖退货、换货、赔偿等业务场景下的操作指引与执行细则',
+    count: 2,
+  },
+  {
+    id: '40',
+    question:
+      '调整后查询：电商平台商家质量管理规范及执行标准，涵盖商品品质要求、违规行为处罚措施、质量抽检流程与执行细则等业务场景下的相关规定',
+    count: 1,
+  },
+  {
+    id: '41',
+    question:
+      '调整后查询：电商知识文档中关于商家质量规范的相关规定，包括商品质量要求、商家违规行为的认定与处理标准、质量考核指标（如品质退款率、差评率等）及不同业务场景下的执行细则等内容',
+    count: 1,
+  },
+  {
+    id: '42',
+    question: '调整后查询：电商平台商家定向准入细则及不同业务场景下的准入资质要求与审核标准',
+    count: 1,
+  },
+  {
+    id: '43',
+    question: '调整后查询：电商平台商家质量管理规范及违规行为处理标准与处罚措施',
+    count: 1,
+  },
+  {
+    id: '44',
+    question: '调整后查询：电商平台商家商品质量规范要求、违规行为认定标准及相应处罚措施',
+    count: 1,
+  },
+  {
+    id: '45',
+    question: '调整后查询：电商平台商品质量规范要求及不同类目商品的质检标准与合规管理规定',
+    count: 1,
+  },
+  {
+    id: '46',
+    question: '商家管理',
+    count: 4,
+  },
+  {
+    id: '47',
+    question:
+      '调整后查询语句：电商知识文档中关于各类业务场景下商家商品质量标准及质量管理的规定与执行要求',
+    count: 1,
+  },
+  {
+    id: '48',
+    question: '商家产品',
+    count: 1,
+  },
+  {
+    id: '49',
+    question: '调整后查询：电商平台商家入驻条件及流程规定',
+    count: 2,
+  },
+  {
+    id: '50',
+    question: '调整后查询语句：电商平台商家入驻条件、审核标准及入驻流程相关规定',
+    count: 2,
+  },
+  {
+    id: '51',
+    question:
+      '调整后查询语句：电商平台商家入驻条件、资质要求、各类目准入标准及入驻审核流程、审批时效等相关规定',
+    count: 1,
+  },
+  {
+    id: '52',
+    question:
+      '调整后查询：电商平台各类目商家入驻条件、资质要求（含必备证件与行业许可）、入驻审核流程及时效规定',
+    count: 1,
+  },
+  {
+    id: '53',
+    question: '调整后查询语句：电商平台商品信息发布规范及审核标准',
+    count: 3,
+  },
+  {
+    id: '54',
+    question: '微调后查询：电商平台各类目商家入驻条件、资质要求、审核标准及流程的相关规定',
+    count: 1,
+  },
+  {
+    id: '55',
+    question: '调整后查询语句：电商平台商家入驻条件、资质要求、审核流程及相关管理规定',
+    count: 1,
+  },
+  {
+    id: '56',
+    question: '电商平台商品信息发布的要求',
+    count: 1,
+  },
 ]
 
 // 模拟零命中问题列表数据
-export const zeroHitQuestions = [
+export const noHitData = [
   {
     id: 1,
     question: '电商平台商家入驻条件、资质要求、各类目准入标准及入驻审核流程、审批时效等相关规定',
@@ -82,22 +339,22 @@ export const top5Documents = [
   },
   {
     id: 1,
+    name: '【抖音电商】商品品质抽检规范',
+    count: 13,
+  },
+  {
+    id: 2,
     name: '商家商品品质问题管理规范',
     count: 12,
   },
   {
-    id: 2,
-    name: '商家定向准入细则',
-    count: 5,
-  },
-  {
     id: 3,
-    name: '招商标准及入驻规范',
-    count: 4,
+    name: '【抖音电商】商品体感验货规范',
+    count: 8,
   },
   {
     id: 4,
-    name: '商品信息发布规范',
-    count: 1,
+    name: '商家定向准入细则',
+    count: 5,
   },
 ]
