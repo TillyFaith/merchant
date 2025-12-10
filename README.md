@@ -40,10 +40,9 @@
 src/
 ├── assets/ # 静态资源
 ├── components/ # 组件
-│ ├── KnowledgeHeatmap.vue # 知识点热力图
 │ ├── HighFrequencyQuestions.vue # 高频问题组件
 │ ├── SideMenu.vue # 分类侧边菜单
-│ ├── Top5Documents.vue # 热门文档组件
+│ ├── Top5Documents.vue # 知识文档热力图
 │ └── ...
 ├── stores/ # Pinia 状态管理
 │ ├── chat.js # 聊天相关状态

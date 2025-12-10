@@ -5,7 +5,6 @@ import { defineStore } from 'pinia'
 import { getTop10Data, getNoHitData, getTop5RefData } from '@/utils/api'
 
 export const useDataVisualizationStore = defineStore('dataVisualization', () => {
-  // const heatmapData = ref([])
   const top10Data = ref([])
   // 新增：热门文档数据状态
   const top5DocsData = ref([])
@@ -72,7 +71,6 @@ export const useDataVisualizationStore = defineStore('dataVisualization', () => 
   // }
 
   return {
-    // heatmapData,
     top10Data,
     noHitData,
     top5DocsData, // 热门文档数据

@@ -38,7 +38,7 @@ export const useChatStore = defineStore(
     const createConversation = () => {
       const newConversation = {
         id: generateId(),
-        title: '日常问候',
+        title: '日常会话',
         messages: [],
         createdAt: Date.now(),
       }
@@ -65,8 +65,15 @@ export const useChatStore = defineStore(
     const setIsLoading = (value) => {
       isLoading.value = value
     }
-
-    const updateLastMessage = (content, reasoning_content, completion_tokens, speed) => {
+    // 更新消息
+    const updateLastMessage = (
+      content,
+      reasoning_content,
+      completion_tokens,
+      speed,
+      references,
+      title,
+    ) => {
       if (currentConversation.value?.messages.length > 0) {
         const lastMessage =
           currentConversation.value.messages[currentConversation.value.messages.length - 1]
@@ -74,9 +81,14 @@ export const useChatStore = defineStore(
         lastMessage.reasoning_content = reasoning_content
         lastMessage.completion_tokens = completion_tokens
         lastMessage.speed = speed
+        lastMessage.references = references
+        lastMessage.content += lastMessage.references
+        // lastMessage.title = title
+        currentConversation.value.title = title
+        localStorage.setItem('chatTitle', title)
       }
     }
-
+    // 获取消息
     const getLastMessage = () => {
       if (currentConversation.value?.messages.length > 0) {
         return currentConversation.value.messages[currentConversation.value.messages.length - 1]
@@ -84,7 +96,7 @@ export const useChatStore = defineStore(
       return null
     }
 
-    // 更新对话标题
+    //  编辑对话标题
     const updateConversationTitle = (conversationId, newTitle) => {
       const conversation = conversations.value.find((c) => c.id === conversationId)
       if (conversation) {

@@ -76,19 +76,28 @@ export const messageHandler = {
                 hasNewContent = true
               }
             }
-            // 3. 处理引用类型：只存储，不拼接内容
+            // 3. 处理引用文档
             else if (data.type === 'ref' && data.choices && data.choices.length > 0) {
               const delta = data.choices[0].delta || {}
               const refContent = delta.content || []
+              for (const ref of refContent) {
+                // 文档地址： http://localhost:5173/knowledge/${docId}
+                // https://merchant-phi-ten.vercel.app/knowledge/${docId}
+                const baseUrl =
+                  typeof window !== 'undefined'
+                    ? window.location.href.indexOf('/chat') !== -1
+                      ? window.location.href.substring(0, window.location.href.indexOf('/chat'))
+                      : window.location.href
+                    : 'http://localhost:5173/knowledge'
+                const likedText = `[${ref.title}](${baseUrl}/knowledge/${ref.docId})`
+                accumulatedReferences.push(likedText)
+              }
+
+              accumulatedReferences = '\n 以上回答文档来源：\n' + accumulatedReferences.join('\n')
 
               // 将引用数据存入数组（去重处理，可选）
               if (Array.isArray(refContent) && refContent.length > 0) {
-                accumulatedReferences = [
-                  ...accumulatedReferences,
-                  ...refContent.filter(
-                    (ref) => !accumulatedReferences.some((exist) => exist.docId === ref.docId),
-                  ),
-                ]
+                console.log('accumulatedReferences:', accumulatedReferences)
                 hasNewContent = true // 标记更新，用于传递引用数据
               }
             }

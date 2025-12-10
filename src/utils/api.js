@@ -168,27 +168,6 @@ export const getVisualizationData = async () => {
     throw error
   }
 }
-/**
- * 获取知识点热力图数据
- */
-export const getHeatmapData = async () => {
-  const response = await fetch(`${BASE_URL}/robot/heatmap`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`)
-  }
-
-  const data = await response.json()
-  if (!data.ok) {
-    throw new Error(data.message || '获取知识点热力图数据失败')
-  }
-  return data.data
-}
 
 /**
  * 获取高频问题Top10数据

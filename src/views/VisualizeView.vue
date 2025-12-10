@@ -86,7 +86,6 @@
 
 <script setup>
 import { DataAnalysis } from '@element-plus/icons-vue'
-// import KnowledgeHeatmap from '@/components/KnowledgeHeatmap.vue'
 import HighFrequencyQuestions from '@/components/HighFrequencyQuestions.vue'
 import ZeroHitQuestions from '@/components/ZeroHitQuestions.vue'
 import Top5Documents from '@/components/Top5Documents.vue'

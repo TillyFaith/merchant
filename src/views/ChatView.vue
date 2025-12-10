@@ -59,7 +59,7 @@ const handleSend = async (messageContent) => {
     // 调用API获取回复
     const response = await createChatCompletion(chatId, query)
 
-    // 关键修改：将后端返回的Id赋值给chatId
+    // 将后端返回的Id赋值给chatId
     if (response.data && response.data.Id) {
       chatId = response.data.Id
       localStorage.setItem('chatId', chatId)
@@ -70,8 +70,8 @@ const handleSend = async (messageContent) => {
     await messageHandler.handleResponse(
       response,
       true,
-      (content, reasoning_content) => {
-        chatStore.updateLastMessage(content, reasoning_content)
+      (content, reasoning_content, completion_tokens, speed, references, title) => {
+        chatStore.updateLastMessage(content, reasoning_content, completion_tokens, speed, references, title)
       },
     )
   } catch (error) {
@@ -110,10 +110,10 @@ const handleNewChat = () => {
 }
 
 // 获取当前对话标题
-const currentTitle = computed(() => chatStore.currentConversation?.title || 'Chat')
+const currentTitle = computed(() => chatStore.currentConversation?.title || localStorage.getItem('chatTitle')||' 日常会话')
 // 格式化标题
 const formatTitle = (title) => {
-  return title.length > 4 ? title.slice(0, 4) + '...' : title
+  return title.length > 6 ? title.slice(0, 6) + '...' : title
 }
 
 // 添加对话框组件

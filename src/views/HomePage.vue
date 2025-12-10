@@ -102,7 +102,7 @@ onUnmounted(() => {
             </el-icon>
             <h3>问答机器人</h3>
             <p>以内嵌聊天组件的形式，为商家提供 7*24 小时的智能咨询服务。</p>
-            <p class="note" style="color: #3f7af1">支持 xxx 模型</p>
+            <p class="note" style="color: #3f7af1">支持 Qwen3 模型</p>
           </div>
           <div class="feature-item" @click="navigateToKnowledgeView">
             <el-icon class="feature-icon">

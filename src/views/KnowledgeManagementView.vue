@@ -48,7 +48,10 @@ const filteredDocuments = computed(() => {
   // 如需保留搜索功能则取消注释以下代码
   return documents.filter(doc => {
     const docTitle = doc.title || '';
-    return docTitle.toLowerCase().includes((searchQuery.value || '').toLowerCase());
+    const docId = doc.id ? doc.id.toString() : ''; // 将ID转换为字符串
+    const query = (searchQuery.value || '').toLowerCase();
+    // 同时匹配标题(不区分大小写)和ID
+    return docTitle.toLowerCase().includes(query) || docId.includes(query);
   });
 });
 
@@ -239,7 +242,7 @@ const updateTextDocument = async () => {
         <el-button @click="uploadDialogVisible = true" :icon="UploadFilled">
           创建文档
         </el-button>
-        <el-input v-model="searchQuery" :prefix-icon="Search" placeholder="搜索文档标题..." class="search-input" />
+        <el-input v-model="searchQuery" :prefix-icon="Search" placeholder="输入文档ID或标题查询" class="search-input" />
         <!-- 新增数据可视化跳转按钮 -->
         <el-button style="position: absolute; right: 180px;" class="action-btn" :icon="Histogram"
           @click="router.push('/visualization')">
