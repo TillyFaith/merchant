@@ -8,11 +8,9 @@
           <span style="margin-right: 20px;">场景: {{ getSceneName(document.scene) }}</span>
           <span>更新时间: {{ formatDate(document.updatedAt) }}</span>
           <!-- 添加PDF导出按钮 -->
-          <button
-            style="margin-left: 20px; padding: 4px 12px; background: #409EFF; color: white; border: none; border-radius: 4px; cursor: pointer;"
-            @click="exportToPdf">
-            导出PDF文档
-          </button>
+          <el-tooltip content="下载" placement="top">
+            <el-button :icon="Download" class="export-pdf-btn" style="" @click="exportToPdf" circle></el-button>
+          </el-tooltip>
         </div>
       </template>
       <div class="markdown-content" ref="documentContent" v-html="renderedContent"></div>
@@ -29,6 +27,7 @@ import 'github-markdown-css'
 import { ElMessage } from 'element-plus'
 import { initialCategories } from '@/constants/categories';
 import html2pdf from 'html2pdf.js'  // 导入PDF库
+import { Download } from '@element-plus/icons-vue';
 
 const route = useRoute()
 const knowledgeStore = useKnowledgeStore()
@@ -150,5 +149,17 @@ const getSceneName = (sceneKey) => {
 .markdown-content {
   font-size: 16px;
   line-height: 1.8;
+}
+
+.export-pdf-btn {
+  position: fixed;
+  top: 70px;
+  right: 65px;
+  padding: 12px 12px;
+  background: #409EFF;
+  color: white;
+  border: none;
+  /* border-radius: 4px; */
+  cursor: pointer;
 }
 </style>
