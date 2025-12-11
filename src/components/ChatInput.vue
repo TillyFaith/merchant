@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps, defineEmits, onUnmounted } from 'vue'
+import { ref, onUnmounted } from 'vue'
 // 新增Message导入
 import { ElMessage } from 'element-plus'
 import { Microphone, Mute } from '@element-plus/icons-vue'

@@ -165,7 +165,7 @@ onMounted(async () => {
 }
 
 /* 去除 el-menu 右边框线 */
-::v-deep .no-border-menu {
+:deep .no-border-menu {
   border-right: none !important;
 }
 
