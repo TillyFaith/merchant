@@ -113,19 +113,27 @@ export const updateDocumentStatusApi = async (docId, status) => {
 }
 
 // 创建新的聊天，发送聊天内容
-export const createChatCompletion = async (chatId, query) => {
+export const createChatCompletion = async (chatId, query, file) => {
   const settingStore = useSettingStore()
+  const formData = new FormData()
+  formData.append('chatId', chatId)
+  formData.append('query', query)
+  // 添加文件到FormData
+    if (file.raw) {
+      formData.append(`file`, file.raw)
+    }
   const options = {
     method: 'POST',
+    // 移除Content-Type，让浏览器自动设置multipart/form-data格式及边界
     headers: {
-      // Authorization: `Bearer ${settingStore.settings.apiKey}`,
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json', // 注释掉JSON格式头
+      // 如需认证可添加token: `Bearer ${settingStore.settings.apiKey}`
     },
-    body: JSON.stringify({ chatId, query }),
+    body: formData
   }
 
   try {
-    const startTime = Date.now() // 记录开始时间
+    const startTime = Date.now()
     const response = await fetch(`${BASE_URL}/robot/chat`, options)
 
     if (!response.ok) {
@@ -208,7 +216,7 @@ export const getTop5RefData = async () => {
 
   const data = await response.json()
   if (!data.ok) {
-    throw new Error(data.message || '获取top5引用文档数据失败')
+    throw new Error(data.message || '获取知识文档热力图数据失败')
   }
   return data
 }

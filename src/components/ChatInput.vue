@@ -63,6 +63,7 @@ const handleFileUpload = (uploadFile) => {
     url: URL.createObjectURL(file),
     type: file.type.startsWith('image/') ? 'image' : 'file',
     size: file.size,
+    raw: file // 新增：保存原始文件对象用于上传
   })
   return false // 阻止自动上传
 }
@@ -284,11 +285,12 @@ onUnmounted(() => {
           <Mute @click="forceStopRecognition" />
         </el-icon>
       </button>
-
-      <el-upload class="upload-btn" :auto-upload="false" :show-file-list="false" :on-change="handleFileUpload"
+      <!-- 文件上传 -->
+      <!-- <el-upload class="upload-btn" :auto-upload="false" :show-file-list="false" :on-change="handleFileUpload"
         accept=".pdf,.doc,.docx,.txt">
         <button class="action-btn"><img src="@/assets/photo/附件.png" alt="link" /></button>
-      </el-upload>
+      </el-upload> -->
+      <!-- 图片上传 -->
       <el-upload class="upload-btn" :auto-upload="false" :show-file-list="false" :on-change="handleFileUpload"
         accept="image/*">
         <button class="action-btn" :disabled="props.loading">
@@ -296,6 +298,7 @@ onUnmounted(() => {
         </button>
       </el-upload>
       <div class="divider"></div>
+      <!-- 发送键 -->
       <button class="action-btn send-btn" :disabled="props.loading" @click="handleSend">
         <img src="@/assets/photo/发送.png" alt="send" />
       </button>

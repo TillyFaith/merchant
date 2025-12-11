@@ -56,9 +56,9 @@ const handleSend = async (messageContent) => {
     // 使用组件中的响应式chatId，而非局部变量
     let chatId = localStorage.getItem('chatId') || ''
     const query = messageContent.text
-    // 调用API获取回复
-    const response = await createChatCompletion(chatId, query)
-
+    // 调用API获取回复 - 修复两处错误
+    // 假设message包含files属性
+    const response = await createChatCompletion(chatId, query, messageContent.files[0])
     // 将后端返回的Id赋值给chatId
     if (response.data && response.data.Id) {
       chatId = response.data.Id
