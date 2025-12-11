@@ -92,7 +92,7 @@ const handleRegenerate = async () => {
     const lastUserMessage = chatStore.currentMessages[chatStore.currentMessages.length - 2]
     // 使用 splice 删除最后两个元素
     chatStore.currentMessages.splice(-2, 2)
-    await handleSend({ text: lastUserMessage.content, files: lastUserMessage.files })
+    await handleSend({ text: lastUserMessage.content, files: lastUserMessage.files[0] })
   } catch (error) {
     console.error('Failed to regenerate message:', error)
   }
