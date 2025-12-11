@@ -324,7 +324,7 @@ const navigateToVisualization = () => {
       }
 
       .edit-btn {
-        margin-left: -20px;
+        margin-left: 0px;
         margin-top: -10px;
         opacity: 0;
         width: 0.9rem;
