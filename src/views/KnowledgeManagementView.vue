@@ -16,7 +16,6 @@ const getScenesByBusiness = (businessId) => {
 }
 // 路由实例
 const router = useRouter()
-
 // 处理返回首页
 const handleBack = () => {
   router.push('/')
@@ -39,6 +38,11 @@ const newDocumentContent = ref('')
 const newDocumentBusiness = ref('')
 // 新建文档场景类型
 const newDocumentScene = ref('')
+// 新建文档状态
+const newDocumentStatus = ref('')
+// 新建文档更新时间
+const newDocumentupdatedAt = ref('')
+
 // 添加上传方式选择变量
 const uploadMethod = ref('text') // file: 上传文件, text: 手动输入
 
@@ -119,30 +123,6 @@ const submitDocument = async () => {
     ElMessage.error('操作失败: ' + error.message)
   }
 }
-// 创建文本文档
-// const createTextDocument = async () => {
-//   if (!newDocumentTitle.value || (!isPdfUploaded.value && !newDocumentContent.value.trim()) || !newDocumentBusiness.value) {
-//     ElMessage.warning('请填写标题、内容、业务类型和场景类型')
-//     return
-//   }
-
-//   try {
-//     await knowledgeStore.createTextKnowledge({
-//       title: newDocumentTitle.value,
-//       content: newDocumentContent.value,
-//       business: newDocumentBusiness.value,
-//       scene: newDocumentScene.value
-//     })
-//     newDocumentTitle.value = ''
-//     newDocumentContent.value = ''
-//     newDocumentBusiness.value = ''
-//     newDocumentScene.value = ''
-//     ElMessage.success('文档创建成功')
-//   } catch (error) {
-//     console.error('创建文档失败:', error)
-//     ElMessage.error('创建文档失败: ' + error.message)
-//   }
-// }
 
 // 导航到文档详情
 const navigateToDocument = (docId) => {
@@ -180,6 +160,7 @@ const handleChatbotClick = () => {
 }
 // 处理状态切换
 const handleStatusChange = async (docId, newStatus) => {
+  console.log('newstatus', newStatus)
   try {
     await knowledgeStore.updateDocumentStatus(docId, newStatus);
     ElMessage.success(`文档状态${newStatus === 1 ? '生效' : '失效'}`);
@@ -195,18 +176,25 @@ const currentEditDocId = ref(null)
 const dialogTitle = ref('创建文档')
 
 // 修改编辑按钮处理函数
-const handleEdit = async (docId) => {
+const handleEdit = async (docId, status, updatedAt) => {
+  if (status === 1) {
+    ElMessage.warning('生效中的文档无法编辑');
+    return;
+  }
+  uploadDialogVisible.value = true;
   isEditMode.value = true;
   currentEditDocId.value = docId;
   dialogTitle.value = '编辑文档';
-
+  console.log('handleEdit 中status', status)
+  console.log('handleEdit 中updatedAt', updatedAt)
+  newDocumentStatus.value = status;
+  newDocumentupdatedAt.value = updatedAt;
   // 获取文档详情并填充表单
   const doc = await knowledgeStore.loadDocument(docId);
   newDocumentBusiness.value = doc.business;
   newDocumentScene.value = doc.scene;
   newDocumentTitle.value = doc.title;
   newDocumentContent.value = doc.content;
-  uploadDialogVisible.value = true;
 };
 
 // 修改提交处理函数
@@ -334,7 +322,7 @@ const updateTextDocument = async () => {
                 {{ new Date(scope.row.updatedAt).toLocaleString() }}
               </template>
             </el-table-column>
-            <!-- 新增状态栏列 -->
+            <!-- 状态栏 -->
             <el-table-column label="状态" width="150">
               <template #default="scope">
                 <div style="display: flex; align-items: center;">
@@ -349,7 +337,8 @@ const updateTextDocument = async () => {
             <el-table-column label="操作" width="400">
               <template #default="scope">
                 <el-button size="small" :icon="View" @click="navigateToDocument(scope.row.id)">查看</el-button>
-                <el-button size="small" type="primary" :icon="Edit" @click="handleEdit(scope.row.id)">编辑</el-button>
+                <el-button size="small" type="primary" :icon="Edit"
+                  @click="handleEdit(scope.row.id, scope.row.status, scope.row.updatedAt)">编辑</el-button>
                 <el-button size="small" type="danger" :icon="Delete" @click="handleDelete(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>

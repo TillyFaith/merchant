@@ -285,10 +285,10 @@ onUnmounted(() => {
         </el-icon>
       </button>
 
-      <!-- <el-upload class="upload-btn" :auto-upload="false" :show-file-list="false" :on-change="handleFileUpload"
+      <el-upload class="upload-btn" :auto-upload="false" :show-file-list="false" :on-change="handleFileUpload"
         accept=".pdf,.doc,.docx,.txt">
         <button class="action-btn"><img src="@/assets/photo/附件.png" alt="link" /></button>
-      </el-upload> -->
+      </el-upload>
       <el-upload class="upload-btn" :auto-upload="false" :show-file-list="false" :on-change="handleFileUpload"
         accept="image/*">
         <button class="action-btn" :disabled="props.loading">

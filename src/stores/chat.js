@@ -84,8 +84,11 @@ export const useChatStore = defineStore(
         lastMessage.references = references
         lastMessage.content += lastMessage.references
         // lastMessage.title = title
-        currentConversation.value.title = title
-        localStorage.setItem('chatTitle', title)
+        console.log('本轮对话title:', title)
+        if (title) {
+          currentConversation.value.title = title
+          localStorage.setItem('chatTitle', title)
+        }
       }
     }
     // 获取消息

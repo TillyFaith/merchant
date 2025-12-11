@@ -6,7 +6,7 @@
         <div class="detail-meta">
           <span style="margin-right: 20px;">业务类型: {{ getBusinessName(document.business) }}</span>
           <span style="margin-right: 20px;">场景: {{ getSceneName(document.scene) }}</span>
-          <span>更新时间: {{ formatDate(document.uploadAt) }}</span>
+          <span>更新时间: {{ formatDate(document.updatedAt) }}</span>
         </div>
       </template>
       <div class="markdown-content" v-html="renderedContent"></div>

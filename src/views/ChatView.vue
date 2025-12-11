@@ -110,10 +110,10 @@ const handleNewChat = () => {
 }
 
 // 获取当前对话标题
-const currentTitle = computed(() => chatStore.currentConversation?.title || localStorage.getItem('chatTitle')||' 日常会话')
+const currentTitle = computed(() => chatStore.currentConversation?.title || localStorage.getItem('chatTitle') || '日常会话')
 // 格式化标题
 const formatTitle = (title) => {
-  return title.length > 6 ? title.slice(0, 6) + '...' : title
+  return title.length > 15 ? title.slice(0, 15) + '...' : title
 }
 
 // 添加对话框组件
@@ -148,6 +148,7 @@ const navigateToVisualization = () => {
         <div class="divider"></div>
         <div class="title-wrapper">
           <h1 class="chat-title">{{ formatTitle(currentTitle) }}</h1>
+          <span class="ai-generated-note">本标题由 AI 生成</span>
           <button class="edit-btn" @click="dialogEdit.openDialog(chatStore.currentConversationId, 'edit')">
             <img src="@/assets/photo/编辑.png" alt="edit" />
           </button>
@@ -303,13 +304,28 @@ const navigateToVisualization = () => {
       gap: 0.5rem;
 
       .chat-title {
-        margin: 0;
+        margin-top: -10px;
         font-size: 0.9rem;
         font-weight: 500;
         color: var(--text-color-primary);
       }
 
+      .ai-generated-note {
+        position: absolute;
+        color: #999;
+        /* 灰色文字 */
+        font-size: 0.6em;
+        /* 相对于标题的60%字号 */
+        font-family: inherit;
+        /* 继承标题字体 */
+        margin-top: 25px;
+        // margin-left: -67px;
+        white-space: nowrap
+      }
+
       .edit-btn {
+        margin-left: -20px;
+        margin-top: -10px;
         opacity: 0;
         width: 0.9rem;
         height: 0.9rem;

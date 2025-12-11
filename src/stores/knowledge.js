@@ -69,7 +69,7 @@ export const useKnowledgeStore = defineStore(
           content: targetDoc.content || '',
           business: targetDoc.business || '未分类',
           scene: targetDoc.scene || '未指定',
-          uploadAt: targetDoc.updated_at
+          updatedAt: targetDoc.updated_at // 将uploadAt改为updatedAt
             ? new Date(targetDoc.updated_at.replace(' ', 'T')).getTime()
             : targetDoc.created_at
               ? new Date(targetDoc.created_at.replace(' ', 'T')).getTime()

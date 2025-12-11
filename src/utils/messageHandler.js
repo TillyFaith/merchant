@@ -57,12 +57,11 @@ export const messageHandler = {
 
             // 1. 处理标题
             if (data.type === 'title') {
-              const chatTitle = data.choices[0].delta?.content || ''
+              const chatTitle = data.choices[0].delta?.content || '日常会话'
               if (chatTitle) {
                 accumulatedTitle += chatTitle
                 hasNewContent = true
               }
-              console.log('accumulatedTitle:', accumulatedTitle)
             }
             // 2. 处理内容块类型
             else if (data.type === 'chunk' && data.choices && data.choices.length > 0) {
@@ -85,15 +84,14 @@ export const messageHandler = {
                 // https://merchant-phi-ten.vercel.app/knowledge/${docId}
                 const baseUrl =
                   typeof window !== 'undefined'
-                    ? window.location.href.indexOf('/chat') !== -1
-                      ? window.location.href.substring(0, window.location.href.indexOf('/chat'))
-                      : window.location.href
+                    ? window.location.href.substring(0, window.location.href.indexOf('/chat'))
                     : 'http://localhost:5173/knowledge'
-                const likedText = `[${ref.title}](${baseUrl}/knowledge/${ref.docId})`
+                const likedText = `[《${ref.title}》](${baseUrl}/knowledge/${ref.docId})`
                 accumulatedReferences.push(likedText)
               }
 
-              accumulatedReferences = '\n 以上回答文档来源：\n' + accumulatedReferences.join('\n')
+              accumulatedReferences =
+                '\n 以上回答参考知识库文档：\n' + accumulatedReferences.join('\n')
 
               // 将引用数据存入数组（去重处理，可选）
               if (Array.isArray(refContent) && refContent.length > 0) {

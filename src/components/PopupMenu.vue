@@ -33,7 +33,7 @@ const toggle = () => {
 
 // 创建新对话
 const handleNewChat = () => {
-  localStorage.setItem('chatTitle')
+  localStorage.setItem('chatTitle', '')
   chatStore.createConversation()
   isVisible.value = false
 }
@@ -46,7 +46,7 @@ const handleSwitchChat = (conversationId) => {
 
 // 格式化标题
 const formatTitle = (title) => {
-  return title?.length > 4 ? title.slice(0, 4) + '...' : title
+  return title?.length > 6 ? title.slice(0, 6) + '...' : title
 }
 
 // 导出方法供父组件调用
