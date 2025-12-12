@@ -4,7 +4,8 @@ import { ref, onUnmounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Microphone, Mute } from '@element-plus/icons-vue'
 import { Close, Document } from '@element-plus/icons-vue'
-
+// import { useChatStore } from '@/stores/chat'
+// const chatStore = useChatStore()
 // 输入框的值，使用 ref 实现响应式
 const inputValue = ref('')
 const fileList = ref([]) // 存储上传的文件列表
@@ -51,7 +52,15 @@ const handleNewline = (e) => {
   e.preventDefault() // 阻止默认的 Enter 发送行为
   inputValue.value += '\n' // 在当前位置添加换行符
 }
-
+// 新增：图片转Base64函数
+// const convertImageToBase64 = (file) => {
+//   return new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.onload = (e) => resolve(e.target.result);
+//     reader.onerror = reject;
+//     reader.readAsDataURL(file);
+//   });
+// };
 // 处理文件上传
 const handleFileUpload = (uploadFile) => {
   // 确保获取到的是文件对象

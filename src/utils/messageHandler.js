@@ -86,12 +86,16 @@ export const messageHandler = {
                   typeof window !== 'undefined'
                     ? window.location.href.substring(0, window.location.href.indexOf('/chat'))
                     : 'http://localhost:5173/knowledge'
-                const likedText = `[《${ref.title}》](${baseUrl}/knowledge/${ref.docId})`
+                // 修改前：Markdown格式链接（当前页面打开）
+                // const likedText = `[《${ref.title}》](${baseUrl}/knowledge/${ref.docId})`
+
+                // 修改后：HTML格式链接（新页面打开）
+                const likedText = `<a href="${baseUrl}/knowledge/${ref.docId}" target="_blank">《${ref.title}》</a>`
                 accumulatedReferences.push(likedText)
               }
 
               accumulatedReferences =
-                '\n 以上回答参考知识库文档：\n' + accumulatedReferences.join('\n')
+                '\n 参考文档：\n' + accumulatedReferences.join('\n')
 
               // 将引用数据存入数组（去重处理，可选）
               if (Array.isArray(refContent) && refContent.length > 0) {

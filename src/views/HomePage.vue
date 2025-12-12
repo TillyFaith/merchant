@@ -110,7 +110,7 @@ onUnmounted(() => {
             </el-icon>
             <h3>知识管理</h3>
             <p>按照业务、场景进行多级分类，查看、编辑、更新或删除知识文档，并可实时查看知识文档状态。</p>
-            <p class="note">支持上传 pdf 文件、手动输入方式创建文档</p>
+            <p class="note">支持上传 txt、pdf 文件、手动输入方式创建文档</p>
           </div>
           <div class="feature-item" @click="navigateToVisualization">
             <el-icon class="feature-icon">

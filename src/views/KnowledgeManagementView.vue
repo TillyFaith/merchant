@@ -101,6 +101,8 @@ const submitDocument = async () => {
         newDocumentBusiness.value,
         newDocumentScene.value
       )
+      // 新增：上传成功后刷新文档列表
+      knowledgeStore.loadDocList(newDocumentBusiness.value, newDocumentScene.value)
     } else if (!isPdfUploaded.value) {
       // 处理文本内容提交
       if (!newDocumentContent.value.trim()) {
@@ -281,7 +283,7 @@ const updateTextDocument = async () => {
               <el-button type="primary">上传文件</el-button>
               <template #tip>
                 <div class="el-upload__tip">
-                  支持 PDF格式，最大 10MB
+                  支持 txt、PDF格式
                 </div>
               </template>
             </el-upload>

@@ -26,9 +26,9 @@
               </el-icon>
               <span>数据可视化</span>
             </template>
-            <el-menu-item index="1-1">高频问题Top10</el-menu-item>
             <el-menu-item index="1-2">零命中问题列表</el-menu-item>
             <el-menu-item index="1-3">知识文档热力图</el-menu-item>
+            <el-menu-item index="1-1">高频问题Top10</el-menu-item>
           </el-sub-menu>
         </el-menu>
         <!-- 智能助理图标 -->

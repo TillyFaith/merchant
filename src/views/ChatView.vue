@@ -113,7 +113,7 @@ const handleNewChat = () => {
 const currentTitle = computed(() => chatStore.currentConversation?.title || localStorage.getItem('chatTitle') || '日常会话')
 // 格式化标题
 const formatTitle = (title) => {
-  return title.length > 15 ? title.slice(0, 15) + '...' : title
+  return title.length > 10 ? title.slice(0, 10) + '...' : title
 }
 
 // 添加对话框组件
@@ -135,6 +135,7 @@ const navigateToKnowledgeManagement = () => {
 const navigateToVisualization = () => {
   router.push('/visualization')
 }
+
 </script>
 
 <template>
