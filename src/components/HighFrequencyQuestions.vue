@@ -19,6 +19,7 @@ const highFrequencyQuestions = computed(() => {
 })
 const chartRef = ref(null)
 let chartInstance = null
+let observer = null
 
 const initChart = () => {
   // 检查并销毁已有实例
@@ -87,9 +88,24 @@ const initChart = () => {
   window.addEventListener('resize', handleResize)
 }
 onMounted(() => {
-  initChart()
+  // 替换直接调用initChart()为Intersection Observer监听
+  observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && props.data.length) {
+      initChart()
+      observer.unobserve(chartRef.value)
+    }
+  }, { threshold: 0.1 })
+
+  if (chartRef.value) {
+    observer.observe(chartRef.value)
+  }
 })
 
+onUnmounted(() => {
+  chartInstance?.dispose()
+  window.removeEventListener('resize', handleResize)
+  observer?.disconnect() // 清理observer
+})
 const handleResize = () => {
   chartInstance?.resize()
 }
@@ -102,10 +118,6 @@ watch(
   },
   { deep: true }
 )
-onUnmounted(() => {
-  chartInstance?.dispose()
-  window.removeEventListener('resize', handleResize)
-})
 </script>
 
 <style scoped>

@@ -93,7 +93,7 @@ import { useRouter } from 'vue-router'
 import { Document } from '@element-plus/icons-vue'
 // 新增：导入store和响应式相关依赖
 import { useDataVisualizationStore } from '@/stores/dataVisualization'
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 // import { ElMessage } from 'element-plus'
 
 // 获取路由实例
@@ -101,8 +101,21 @@ const router = useRouter()
 // 新增：获取数据可视化store实例
 const visualizationStore = useDataVisualizationStore()
 // 新增：定义加载状态
-// const loading = ref(true)
+// 新增加载状态
+const loadingStates = ref({
+  noHitData: true,
+  top5DocsData: true,
+  top10Data: true
+})
 
+onMounted(async () => {
+  // 并行加载数据并更新状态
+  await Promise.all([
+    visualizationStore.fetchNoHitData().then(() => loadingStates.value.noHitData = false),
+    visualizationStore.fetchTop5DocsData().then(() => loadingStates.value.top5DocsData = false),
+    visualizationStore.fetchTop10Data().then(() => loadingStates.value.top10Data = false)
+  ])
+})
 const top10Data = computed(() => visualizationStore.top10Data)
 const noHitData = computed(() => visualizationStore.noHitData)
 const top5DocsData = computed(() => visualizationStore.top5DocsData)

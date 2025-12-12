@@ -86,21 +86,34 @@ const handleUpload = (file) => {
 }
 
 // 提交创建文档
+// 在script部分添加进度跟踪变量
+const uploadProgress = ref(0);
+const isUploading = ref(false);
+
+// 修改submitDocument方法
 const submitDocument = async () => {
   if (!newDocumentBusiness.value || !newDocumentTitle.value) {
-    ElMessage.warning('请填写标题并选择业务和场景类型')
-    return
+    ElMessage.warning('请填写标题并选择业务和场景类型');
+    return;
   }
 
   try {
     if (uploadedFile.value) {
-      // 处理文件上传
+      isUploading.value = true;
+      uploadProgress.value = 0;
+      // 处理文件上传，添加进度回调
       await knowledgeStore.uploadDocument(
         uploadedFile.value,
         newDocumentTitle.value,
         newDocumentBusiness.value,
-        newDocumentScene.value
-      )
+        newDocumentScene.value,
+        (percent) => {
+          uploadProgress.value = percent;
+        }
+      );
+      // 上传成功后重置进度
+      uploadProgress.value = 0;
+      isUploading.value = false;
       // 新增：上传成功后刷新文档列表
       knowledgeStore.loadDocList(newDocumentBusiness.value, newDocumentScene.value)
     } else if (!isPdfUploaded.value) {
@@ -122,7 +135,10 @@ const submitDocument = async () => {
     uploadedFile.value = null
     isPdfUploaded.value = false
   } catch (error) {
-    ElMessage.error('操作失败: ' + error.message)
+    // 错误处理时重置进度
+    uploadProgress.value = 0;
+    isUploading.value = false;
+    ElMessage.error('操作失败: ' + error.message);
   }
 }
 
@@ -280,7 +296,12 @@ const updateTextDocument = async () => {
             <!-- 根据选择显示上传区域或文本输入区域 -->
             <el-upload v-if="uploadMethod === 'file'" class="upload-demo" action="" :auto-upload="false"
               :on-change="handleUpload" :show-file-list="true" accept=".pdf,.doc,.docx,.txt">
-              <el-button type="primary">上传文件</el-button>
+              <el-button type="primary" :loading="isUploading">上传文件</el-button>
+              <!-- 新增进度条 -->
+              <el-progress v-if="isUploading && uploadProgress > 0" :percentage="uploadProgress"
+                :status="uploadProgress === 100 ? 'success' : 'active'" style="margin: 15px; min-width: 200px;"
+                text-inside stroke-width="2" />
+              <el-loading v-if="isUploading && uploadProgress === 0" text="上传中..." style="margin-top: 15px;" />
               <template #tip>
                 <div class="el-upload__tip">
                   支持 txt、PDF格式

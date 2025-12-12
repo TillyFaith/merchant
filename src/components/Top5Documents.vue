@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
 import * as echarts from 'echarts'
 
 const props = defineProps({
@@ -105,12 +105,13 @@ onMounted(() => {
 // 添加数据监听
 watch(
   () => props.data,
-  (newData) => {
+  async (newData) => {
     if (newData && newData.length) {
-      initChart()  // 数据变化时重新初始化图表
+      await nextTick()
+      initChart()
     }
   },
-  { deep: true }
+  { deep: true, immediate: false } // 关闭immediate，避免初始无数据时执行
 )
 
 const handleResize = () => {

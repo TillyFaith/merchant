@@ -134,7 +134,7 @@ export const useKnowledgeStore = defineStore(
       }
     }
     // 上传pdf文件
-    const uploadDocument = async (file, title, business, scene) => {
+    const uploadDocument = async (file, title, business, scene, onProgress) => {
       isLoading.value = true
       try {
         const formData = new FormData()
@@ -144,7 +144,8 @@ export const useKnowledgeStore = defineStore(
         formData.append('scene', scene) // 场景类型 (scene2_test)
         formData.append('status', 0) // 状态值 (固定为0)
 
-        await createDocument(formData)
+        // 传递进度回调
+        await createDocument(formData, onProgress);
 
         // 修复：使用 business 作为分类ID查询（或根据实际业务逻辑调整）
         const category = categories.value.find((c) => c.id === business)

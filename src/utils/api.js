@@ -48,18 +48,35 @@ export const getDocumentApi = async (docId) => {
   return data.data
 }
 
-// 创建文档
-export const createDocument = async (formData) => {
-  const response = await fetch(`${BASE_URL}/knowledge/addDoc`, {
-    method: 'POST',
-    body: formData,
-  })
+// 创建文档 - 支持进度监听
+export const createDocument = async (formData, onProgress) => {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', `${BASE_URL}/knowledge/addDoc`)
 
-  const data = await response.json()
-  if (!data.ok) {
-    throw new Error(data.message || '创建文档失败')
-  }
-  return data
+    // 添加进度监听
+    xhr.upload.addEventListener('progress', (e) => {
+      if (e.lengthComputable && onProgress) {
+        const percent = Math.round((e.loaded / e.total) * 100)
+        onProgress(percent)
+      }
+    })
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        const data = JSON.parse(xhr.responseText)
+        if (!data.ok) {
+          reject(new Error(data.message || '创建文档失败'))
+        }
+        resolve(data)
+      } else {
+        reject(new Error(`HTTP error! status: ${xhr.status}`))
+      }
+    }
+
+    xhr.onerror = () => reject(new Error('网络请求失败'))
+    xhr.send(formData)
+  })
 }
 
 // 删除文档
