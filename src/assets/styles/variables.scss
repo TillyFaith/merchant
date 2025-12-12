@@ -24,25 +24,25 @@
   }
 }
 
-.code-block.dark-theme {
-  --code-block-bg: #282c34; /* atom-one-dark 的背景色 */
-  --code-header-bg: #21252b; /* 略深一点的头部背景色 */
-  --code-border: #181a1f; /* 更深的边框色 */
-  --code-lang-text: #abb2bf; /* atom-one-dark 的默认文本色 */
-  --code-header-button-hover-bg: #2c313a;
-  --code-text: #abb2bf;
+// .code-block.dark-theme {
+//   --code-block-bg: #282c34; /* atom-one-dark 的背景色 */
+//   --code-header-bg: #21252b; /* 略深一点的头部背景色 */
+//   --code-border: #181a1f; /* 更深的边框色 */
+//   --code-lang-text: #abb2bf; /* atom-one-dark 的默认文本色 */
+//   --code-header-button-hover-bg: #2c313a;
+//   --code-text: #abb2bf;
 
-  pre.hljs {
-    background-color: var(--code-block-bg);
-    /* atom-one-dark 主题会自动处理暗色模式的文本颜色 */
-  }
+//   pre.hljs {
+//     background-color: var(--code-block-bg);
+//     /* atom-one-dark 主题会自动处理暗色模式的文本颜色 */
+//   }
 
-  .code-header {
-    background-color: var(--code-header-bg);
-    border-color: var(--code-border);
+//   .code-header {
+//     background-color: var(--code-header-bg);
+//     border-color: var(--code-border);
 
-    .code-lang {
-      color: var(--code-lang-text);
-    }
-  }
-}
+//     .code-lang {
+//       color: var(--code-lang-text);
+//     }
+//   }
+// }

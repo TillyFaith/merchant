@@ -88,29 +88,29 @@ const handleCodeCopy = async (event) => {
 }
 
 // 处理代码块主题切换
-const handleThemeToggle = (event) => {
-  // 确保我们获取到正确的元素
-  const codeBlock = event.target.closest('.code-block')
-  // 修改获取图标元素的方式
-  const themeBtn = event.target.closest('[data-action="theme"]')
-  const themeIcon = themeBtn.querySelector('img')
-  const lightIcon = themeIcon.dataset.lightIcon
-  const darkIcon = themeIcon.dataset.darkIcon
+// const handleThemeToggle = (event) => {
+// 确保我们获取到正确的元素
+// const codeBlock = event.target.closest('.code-block')
+// 修改获取图标元素的方式
+// const themeBtn = event.target.closest('[data-action="theme"]')
+// const themeIcon = themeBtn.querySelector('img')
+// const lightIcon = themeIcon.dataset.lightIcon
+// const darkIcon = themeIcon.dataset.darkIcon
 
-  // 添加调试日志
-  // console.log('切换主题', {
-  //   codeBlock,
-  //   themeIcon,
-  //   lightIcon,
-  //   darkIcon,
-  //   isDark: codeBlock.classList.contains('dark-theme'),
-  // })
+// 添加调试日志
+// console.log('切换主题', {
+//   codeBlock,
+//   themeIcon,
+//   lightIcon,
+//   darkIcon,
+//   isDark: codeBlock.classList.contains('dark-theme'),
+// })
 
-  codeBlock.classList.toggle('dark-theme')
+// codeBlock.classList.toggle('dark-theme')
 
-  // 切换图标
-  themeIcon.src = codeBlock.classList.contains('dark-theme') ? lightIcon : darkIcon
-}
+// 切换图标
+// themeIcon.src = codeBlock.classList.contains('dark-theme') ? lightIcon : darkIcon
+// }
 
 // 修改事件监听的方式
 onMounted(() => {
@@ -128,8 +128,8 @@ onMounted(() => {
             copyBtn._hasListener = true
           }
           if (themeBtn && !themeBtn._hasListener) {
-            themeBtn.addEventListener('click', handleThemeToggle)
-            themeBtn._hasListener = true
+            // themeBtn.addEventListener('click', handleThemeToggle)
+            // themeBtn._hasListener = true
             // console.log('添加主题切换监听器', { block, themeBtn })
           }
         })
@@ -149,10 +149,10 @@ onMounted(() => {
     const codeBlocks = document.querySelectorAll('.code-block')
     codeBlocks.forEach((block) => {
       const copyBtn = block.querySelector('[data-action="copy"]')
-      const themeBtn = block.querySelector('[data-action="theme"]')
+      // const themeBtn = block.querySelector('[data-action="theme"]')
 
       copyBtn?.removeEventListener('click', handleCodeCopy)
-      themeBtn?.removeEventListener('click', handleThemeToggle)
+      // themeBtn?.removeEventListener('click', handleThemeToggle)
     })
   })
 })
@@ -181,7 +181,9 @@ const renderedReasoning = computed(() => {
           </div>
           <!-- 文件预览 -->
           <div v-else class="file-preview">
-            <el-icon><Document /></el-icon>
+            <el-icon>
+              <Document />
+            </el-icon>
             <span class="file-name">{{ file.name }}</span>
             <span class="file-size">{{ (file.size / 1024).toFixed(1) }}KB</span>
           </div>
@@ -202,21 +204,13 @@ const renderedReasoning = computed(() => {
         </el-icon>
       </div>
       <!-- reasoning_content -->
-      <div
-        v-if="message.reasoning_content && isReasoningExpanded"
-        class="reasoning markdown-body"
-        v-html="renderedReasoning"
-      ></div>
+      <div v-if="message.reasoning_content && isReasoningExpanded" class="reasoning markdown-body"
+        v-html="renderedReasoning"></div>
       <!-- content -->
       <div class="bubble markdown-body" v-html="renderedContent"></div>
       <!-- 只在 AI 助手消息中显示操作按钮和 tokens 信息 -->
       <div v-if="message.role === 'assistant' && message.loading === false" class="message-actions">
-        <button
-          v-if="isLastAssistantMessage"
-          class="action-btn"
-          @click="handleRegenerate"
-          data-tooltip="重新生成"
-        >
+        <button v-if="isLastAssistantMessage" class="action-btn" @click="handleRegenerate" data-tooltip="重新生成">
           <img :src="regenerateIcon" alt="regenerate" />
         </button>
         <button class="action-btn" @click="handleCopy" data-tooltip="复制">
@@ -240,14 +234,18 @@ const renderedReasoning = computed(() => {
 
 <style lang="scss" scoped>
 .message-item {
-  display: flex; /* 使用弹性布局 */
-  margin-bottom: 2rem; /* 消息之间的垂直间距 */
+  display: flex;
+  /* 使用弹性布局 */
+  margin-bottom: 2rem;
+  /* 消息之间的垂直间距 */
 
   &.is-mine {
-    justify-content: flex-end; /* 用户消息靠右对齐 */
+    justify-content: flex-end;
+    /* 用户消息靠右对齐 */
 
     .content .bubble.markdown-body {
-      background-color: #f4f4f4; /* 用户消息背景色 */
+      background-color: #f4f4f4;
+      /* 用户消息背景色 */
 
       // /* 用户消息中的代码块样式 */
       // :deep(pre) {
@@ -280,7 +278,8 @@ const renderedReasoning = computed(() => {
   }
 
   .content {
-    max-width: 100%; /* 限制消息气泡最大宽度 */
+    max-width: 100%;
+    /* 限制消息气泡最大宽度 */
     min-width: 0; // 设置最小宽度
     width: fit-content; // 宽度适应内容，但不超过max-width
     overflow: hidden;
@@ -336,6 +335,7 @@ const renderedReasoning = computed(() => {
       // 处理内部段落的样式
       :deep(p) {
         margin: 0; // 移除段落默认边距
+
         &:not(:last-child) {
           margin-bottom: 8px; // 段落之间保持间距，最后一个段落不需要
         }
@@ -354,13 +354,20 @@ const renderedReasoning = computed(() => {
       // display: inline-block; /* 内联块级元素 */
       display: block; // 改为块级元素
       width: 100%; // 占满容器宽度
-      padding: 0.75rem 1rem; /* 气泡内边距 */
-      background-color: #ffffff; /* AI助手消息背景色 */
-      border-radius: 1rem; /* 气泡圆角 */
-      font-size: 1rem; /* 普通文字大小16px */
-      line-height: 1.5; /* 文字行高 */
-      word-break: break-word; /* 长文本自动换行 */
+      padding: 0.75rem 1rem;
+      /* 气泡内边距 */
+      background-color: #ffffff;
+      /* AI助手消息背景色 */
+      border-radius: 1rem;
+      /* 气泡圆角 */
+      font-size: 1rem;
+      /* 普通文字大小16px */
+      line-height: 1.5;
+      /* 文字行高 */
+      word-break: break-word;
+      /* 长文本自动换行 */
       overflow: hidden;
+      color: #000000; /* 添加文字颜色为黑色 */
 
       /* 修改代码块容器样式 */
       :deep(.code-block) {
@@ -371,8 +378,9 @@ const renderedReasoning = computed(() => {
         width: 100%;
 
         /* 移除默认的 pre 边距 */
-        > pre {
-          margin: 0 !important; /* 使用 !important 覆盖默认样式 */
+        >pre {
+          margin: 0 !important;
+          /* 使用 !important 覆盖默认样式 */
         }
 
         /* 代码块头部样式 */
@@ -406,7 +414,8 @@ const renderedReasoning = computed(() => {
               align-items: center;
               justify-content: center;
               transition: all 0.2s ease;
-              position: relative; /* 为 tooltip 定位做准备 */
+              position: relative;
+              /* 为 tooltip 定位做准备 */
 
               img {
                 width: 1rem;
@@ -431,7 +440,8 @@ const renderedReasoning = computed(() => {
                 visibility: hidden;
                 transition: all 0.2s ease;
                 margin-bottom: 5px;
-                z-index: 10; /* 确保提示框在最上层 */
+                z-index: 10;
+                /* 确保提示框在最上层 */
               }
 
               &:hover {
@@ -444,11 +454,13 @@ const renderedReasoning = computed(() => {
 
         /* 代码块内容样式 */
         pre.hljs {
-          margin: 0 !important; /* 确保没有边距 */
+          margin: 0 !important;
+          /* 确保没有边距 */
           padding: 1rem;
           background-color: var(--code-block-bg);
           overflow-x: auto; // 添加横向滚动
           white-space: pre; // 保持代码格式
+
           code {
             white-space: pre; // 保持代码格式
           }
@@ -458,6 +470,7 @@ const renderedReasoning = computed(() => {
       // 段落样式
       :deep(p) {
         margin: 0;
+
         &:not(:last-child) {
           margin-bottom: 0.5rem; // 段落间距
         }
@@ -538,8 +551,10 @@ const renderedReasoning = computed(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.2s ease; /* 修改过渡效果 */
-        position: relative; /* 为 tooltip 定位做准备 */
+        transition: all 0.2s ease;
+        /* 修改过渡效果 */
+        position: relative;
+        /* 为 tooltip 定位做准备 */
 
         img {
           width: 1rem;
@@ -549,9 +564,11 @@ const renderedReasoning = computed(() => {
         }
 
         &::after {
-          content: attr(data-tooltip); /* 使用 data-tooltip 替代 title */
+          content: attr(data-tooltip);
+          /* 使用 data-tooltip 替代 title */
           position: absolute;
-          bottom: 100%; /* 定位到按钮上方 */
+          bottom: 100%;
+          /* 定位到按钮上方 */
           left: 50%;
           transform: translateX(-50%);
           padding: 0.25rem 0.5rem;
@@ -563,7 +580,8 @@ const renderedReasoning = computed(() => {
           opacity: 0;
           visibility: hidden;
           transition: all 0.2s ease;
-          margin-bottom: 5px; /* 与按钮的间距 */
+          margin-bottom: 5px;
+          /* 与按钮的间距 */
         }
 
         &:hover {
@@ -571,7 +589,8 @@ const renderedReasoning = computed(() => {
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
           img {
-            filter: brightness(0.4); /* 使用 brightness 滤镜来加深颜色 */
+            filter: brightness(0.4);
+            /* 使用 brightness 滤镜来加深颜色 */
           }
         }
 
@@ -619,6 +638,7 @@ const renderedReasoning = computed(() => {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -632,14 +652,18 @@ const renderedReasoning = computed(() => {
 
   .file-item {
     .image-preview {
-      max-width: 200px; /* 限制最大宽度 */
+      max-width: 200px;
+      /* 限制最大宽度 */
       border-radius: 8px;
       overflow: hidden;
 
       img {
-        display: block; /* 移除图片底部的间隙 */
-        max-width: 100%; /* 限制最大宽度 */
-        height: auto; /* 高度自适应，保持原比例 */
+        display: block;
+        /* 移除图片底部的间隙 */
+        max-width: 100%;
+        /* 限制最大宽度 */
+        height: auto;
+        /* 高度自适应，保持原比例 */
       }
     }
 
